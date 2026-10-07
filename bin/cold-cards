@@ -15,7 +15,8 @@
 #   COLD_DOCKER      container command (default docker; 'mac docker' on an OrbStack Linux machine)
 #   COLD_STREAM      1 to send contexts as a tar stream (default 1; needed for 'mac docker')
 #   COLD_TIMEOUT     replay budget per receipt in seconds (default 5400; heavy loads Multivariate cold)
-#   COLD_JOBS        parallel cold checks (default 3)
+#   COLD_JOBS        parallel cold checks (default 2). A heavy cold check holds about 3 GB; three at once on a
+#                    12 GB OrbStack VM got one of them OOM-killed (HOL exited 137), which reports "not reproduced".
 set -u
 if [ "${1:-}" = --one ]; then   # internal: one cold check. args: card kind file dir
   shift; card=$1 kind=$2 file=$3 dir=$4
@@ -27,7 +28,9 @@ if [ "${1:-}" = --one ]; then   # internal: one cold check. args: card kind file
      --context "$ctx" --image "${COLD_IMAGE:-hol-hearth-cold-checker}" --docker "${COLD_DOCKER:-docker}" \
      --timeout "${COLD_TIMEOUT:-5400}" "${extra[@]}") > "$OUTDIR/logs/$card.$base.log" 2>&1
   rc=$?
-  line=$(grep -m1 -E '^(COLD CHECK|cold-check: refused)' "$OUTDIR/logs/$card.$base.log")
+  line=$(grep -v 'still running' "$OUTDIR/logs/$card.$base.log" | grep -m1 -E '^(COLD CHECK|cold-check: refused)')
+  why=$(grep -m1 '^reason:' "$OUTDIR/logs/$card.$base.log")
+  [ $rc = 0 ] || line="$line ${why}"
   printf '%s\t%s\t%s\t%s\t%ss\t%s\n' "$card" "$kind" "$file" "$rc" "$(( $(date +%s) - start ))" "${line:-see log}" \
     >> "$OUTDIR/cold.tsv"
   exit 0
@@ -52,7 +55,7 @@ while IFS=$'\t' read -r card dir profile leaves controls headline; do
 done < "$WARMDIR/cards.tsv"
 # heavy receipts first, so the long ones start early
 { grep -E '^(017|188|369|150|354-pi) ' "$jobs_file"; grep -v -E '^(017|188|369|150|354-pi) ' "$jobs_file"; } |
-  xargs -P "${COLD_JOBS:-3}" -L 1 "$0" --one
+  xargs -P "${COLD_JOBS:-2}" -L 1 "$0" --one
 
 status=0
 : > "$OUTDIR/summary.txt"
