@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# cold-cards WARMDIR OUTDIR [CARD...]
+#
+# The publish gate. Replays every warm receipt of a finished warm run in Hearth's cold checker: HOL Light built
+# from pinned sources inside a Docker image, with no Hearth runtime, CRIU or warm state (`dev/cold-check` in a
+# hol-hearth checkout; see its docker/cold-checker/README.md). Leaves must reproduce; negative controls run with
+# --expect-failed and must fail cold at the same binding as warm. Prints one cold verdict line per card.
+#
+# WARMDIR is the directory bin/run-cards worked in (it holds cards.tsv, cards/ and out/), copied to this machine.
+# OUTDIR must not exist yet. Runs on Linux.
+#
+# Environment:
+#   HEARTH_CHECKOUT  hol-hearth checkout whose dev/cold-check to use (default ~/src/hol-hearth)
+#   COLD_IMAGE       cold-checker image built from that checkout (default hol-hearth-cold-checker)
+#   COLD_DOCKER      container command (default docker; 'mac docker' on an OrbStack Linux machine)
+#   COLD_STREAM      1 to send contexts as a tar stream (default 1; needed for 'mac docker')
+#   COLD_TIMEOUT     replay budget per receipt in seconds (default 5400; heavy loads Multivariate cold)
+#   COLD_JOBS        parallel cold checks (default 3)
+set -u
+if [ "${1:-}" = --one ]; then   # internal: one cold check. args: card kind file dir
+  shift; card=$1 kind=$2 file=$3 dir=$4
+  base=${file%.ml}; ctx="$OUTDIR/ctx/$card/$base"; mkdir -p "$OUTDIR/ctx/$card"
+  extra=(); [ "$kind" = control ] && extra=(--expect-failed)
+  [ "${COLD_STREAM:-1}" = 1 ] && extra+=(--stream)
+  start=$(date +%s)
+  (cd "$HEARTH_CHECKOUT" && dev/cold-check "$WARMDIR/out/runs/$card/$base" --project-root "$WARMDIR/$dir" \
+     --context "$ctx" --image "${COLD_IMAGE:-hol-hearth-cold-checker}" --docker "${COLD_DOCKER:-docker}" \
+     --timeout "${COLD_TIMEOUT:-5400}" "${extra[@]}") > "$OUTDIR/logs/$card.$base.log" 2>&1
+  rc=$?
+  line=$(grep -m1 -E '^(COLD CHECK|cold-check: refused)' "$OUTDIR/logs/$card.$base.log")
+  printf '%s\t%s\t%s\t%s\t%ss\t%s\n' "$card" "$kind" "$file" "$rc" "$(( $(date +%s) - start ))" "${line:-see log}" \
+    >> "$OUTDIR/cold.tsv"
+  exit 0
+fi
+
+WARMDIR=${1:?usage: bin/cold-cards WARMDIR OUTDIR [CARD...]}; OUTDIR=${2:?usage: bin/cold-cards WARMDIR OUTDIR [CARD...]}
+shift 2
+WARMDIR=$(cd "$WARMDIR" && pwd) || exit 2
+case $OUTDIR in /*) ;; *) OUTDIR=$PWD/$OUTDIR ;; esac
+[ -e "$OUTDIR" ] && { echo "cold-cards: $OUTDIR exists; give a new directory" >&2; exit 2; }
+mkdir -p "$OUTDIR/logs" || exit 2
+HEARTH_CHECKOUT=${HEARTH_CHECKOUT:-$HOME/src/hol-hearth}
+export WARMDIR OUTDIR HEARTH_CHECKOUT
+ONLY=" $* "
+printf 'card\tkind\tfile\texit\twall\tfirst_line\n' > "$OUTDIR/cold.tsv"
+jobs_file="$OUTDIR/jobs.txt"; : > "$jobs_file"
+while IFS=$'\t' read -r card dir profile leaves controls headline; do
+  case $card in '#'*|'') continue ;; esac
+  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
+  for f in ${leaves//,/ }; do echo "$card leaf $f $dir" >> "$jobs_file"; done
+  for f in ${controls//,/ }; do echo "$card control $f $dir" >> "$jobs_file"; done
+done < "$WARMDIR/cards.tsv"
+# heavy receipts first, so the long ones start early
+{ grep -E '^(017|188|369|150|354-pi) ' "$jobs_file"; grep -v -E '^(017|188|369|150|354-pi) ' "$jobs_file"; } |
+  xargs -P "${COLD_JOBS:-3}" -L 1 "$0" --one
+
+status=0
+: > "$OUTDIR/summary.txt"
+while IFS=$'\t' read -r card dir profile leaves controls headline; do
+  case $card in '#'*|'') continue ;; esac
+  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
+  rows=$(awk -F'\t' -v c="$card" '$1 == c' "$OUTDIR/cold.tsv")
+  n=$(printf '%s\n' "$rows" | grep -c .)
+  bad=$(printf '%s\n' "$rows" | awk -F'\t' '$4 != 0' | grep -c .)
+  if [ "$bad" = 0 ]; then word=PASS; else word=FAIL; status=1; fi
+  echo "COLD $card $profile $word: $((n - bad))/$n receipts reproduced cold (leaves reproduced, controls failed at the warm binding)" |
+    tee -a "$OUTDIR/summary.txt"
+done < "$WARMDIR/cards.tsv"
+exit $status

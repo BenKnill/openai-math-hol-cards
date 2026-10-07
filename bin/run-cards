@@ -11,6 +11,9 @@
 #   HEARTH_BIN                    the hearth command (default: hearth on PATH)
 #   HOL_WORKBENCH_RUNTIME_CONFIG  Hearth's runtime config, if your install needs it
 #   HEARTH_TIMEOUT                per-run budget in seconds (default 900)
+#   HEARTH_REUSE=1                allow Hearth to reuse an earlier receipt for byte-identical inputs
+#                                 (verdict UNCHANGED). Default: --force, a fresh replay of every file,
+#                                 so every run root holds its own receipt for the cold gate.
 set -u
 cd "$(dirname "$0")/.." || exit 2
 OUT=${1:?usage: bin/run-cards OUTDIR [CARD...]}
@@ -20,6 +23,7 @@ case $OUT in /*) ;; *) OUT=$PWD/$OUT ;; esac
 mkdir -p "$OUT/logs" "$OUT/runs" || exit 2
 HEARTH=${HEARTH_BIN:-hearth}
 TIMEOUT=${HEARTH_TIMEOUT:-900}
+FORCE=(--force); [ "${HEARTH_REUSE:-0}" = 1 ] && FORCE=()
 ONLY=" $* "
 printf 'card\tkind\tfile\tprofile\tverdict\trun_root\n' > "$OUT/verdicts.tsv"
 : > "$OUT/summary.txt"
@@ -29,11 +33,12 @@ status=0
 run1() {
   local card=$1 kind=$2 dir=$3 file=$4 profile=$5
   local root="$OUT/runs/$card/${file%.ml}" log="$OUT/logs/$card.${file%.ml}"
-  "$HEARTH" prove "$PWD/$dir/$file" --run-root "$root" --profile "$profile" --timeout "$TIMEOUT" \
+  "$HEARTH" prove "$PWD/$dir/$file" --run-root "$root" --profile "$profile" --timeout "$TIMEOUT" "${FORCE[@]}" \
     > "$log.out" 2> "$log.err"
   local v
-  v=$(grep -m1 -E '^(PASSED|FAILED|INCOMPLETE|REFUSED|UNCHANGED) ' "$log.out")
+  v=$(grep -m1 -E '^(PASSED|FAILED|INCOMPLETE|REFUSED) ' "$log.out")
   [ -n "$v" ] || v="NO-VERDICT (see $log.out)"
+  grep -q '^UNCHANGED' "$log.out" && v="$v [reused: $(grep -m1 '^RECEIPT:' "$log.out")]"
   printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$card" "$kind" "$file" "$profile" "$v" "$root" >> "$OUT/verdicts.tsv"
   printf '%s' "$v"
 }
@@ -46,7 +51,8 @@ while IFS=$'\t' read -r card dir profile leaves controls headline; do
   IFS=, read -r -a C <<< "$controls"
   for f in "${L[@]}"; do
     v=$(run1 "$card" leaf "$dir" "$f" "$profile")
-    case $v in PASSED*) n=$(sed -E 's/.*: ([0-9]+\/[0-9]+) bindings.*/\1/' <<< "$v"); detail+=" $f $n;" ;;
+    case $v in PASSED*) n=$(sed -E 's/.*: ([0-9]+\/[0-9]+) bindings.*/\1/' <<< "$v")
+        case $v in *'[reused'*) n="$n (reused receipt)" ;; esac; detail+=" $f $n;" ;;
       *) ok=0; detail+=" $f NOT PASSED: ${v:0:120};" ;; esac
   done
   for f in "${C[@]}"; do
