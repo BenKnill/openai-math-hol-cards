@@ -1,0 +1,10 @@
+PASSED affine_box_353.ml: 4/4 bindings proved, 0 new axioms, eval 0.8s (light)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/353/affine_box_353.ml sha=511d2ee5d6d5
+  AB353_D_EQUATION: proved (source conclusion matched; hypotheses empty) source_line=24
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: !m k g a b c ad bd cd. ~(b = &0) /\ ad = a * (&1 + b - a) /\ bd = b * (m + a + g * c - m * b) /\ cd = c * (&1 + c - (m - &1) * b) + k * a * b ==> (cd * b - c * bd) / b pow 2 = (k - c / b) * a - (m - &1) * (c / b) + b * (c / b) * (&1 + (&1 - g) * (c / b))
+binding_counts: proved=4 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=4 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=ddd72c50c83f
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/353/affine_box_353/20261007T200314Z-633347-affine_box_353-8f1aa1/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/353/affine_box_353/20261007T200314Z-633347-affine_box_353-8f1aa1

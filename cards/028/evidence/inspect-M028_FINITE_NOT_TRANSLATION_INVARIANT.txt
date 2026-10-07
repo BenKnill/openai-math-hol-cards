@@ -1,0 +1,10 @@
+PASSED moat028_translation.ml: 1/1 bindings proved, 0 new axioms, eval 0.5s (light)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/028/moat028_translation.ml sha=a45d5651ba24
+  M028_FINITE_NOT_TRANSLATION_INVARIANT: proved (source conclusion matched; hypotheses empty) source_line=16
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: !s:(real#real)->bool a b. FINITE s /\ ~(s = {}) /\ IMAGE (\z. (FST z + a, SND z + b)) s = s ==> a = &0 /\ b = &0
+binding_counts: proved=1 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=1 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=444085b39329
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/028/moat028_translation/20261007T200338Z-633820-moat028_translation-8a033c/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/028/moat028_translation/20261007T200338Z-633820-moat028_translation-8a033c

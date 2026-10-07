@@ -1,0 +1,10 @@
+PASSED affine_box_353.ml: 4/4 bindings proved, 0 new axioms, eval 0.8s (light)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/353/affine_box_353.ml sha=511d2ee5d6d5
+  AB353_FACE_SIGNS: proved (source conclusion matched; hypotheses empty) source_line=60
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: !a b d. &0 <= a /\ a <= &9 / &2 /\ &0 <= b /\ b <= &7 / &2 /\ &0 <= d /\ d <= &33 / &7 ==> (a = &9 / &2 ==> a * (&1 + b - a) <= &0) /\ (b = &7 / &2 ==> b * (&9 + a + (&12 / &11) * b * d - &9 * b) <= &0) /\ (d = &33 / &7 ==> (&11 - d) * a - &8 * d + b * d * (&1 - d / &11) <= &0) /\ (a = &0 ==> a * (&1 + b - a) = &0) /\ (b = &0 ==> b * (&9 + a + (&12 / &11) * b * d - &9 * b) = &0) /\ (d = &0 ==> &0 <= (&11 - d) * a - &8 * d + b * d * (&1 - d / &11))
+binding_counts: proved=4 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=4 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=ddd72c50c83f
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/353/affine_box_353/20261007T200314Z-633347-affine_box_353-8f1aa1/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/353/affine_box_353/20261007T200314Z-633347-affine_box_353-8f1aa1

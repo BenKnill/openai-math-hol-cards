@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# replay-plain OUTDIR [CARD...]
+#
+# Reproduces the cards with a plain HOL Light and no Hearth: for each leaf and negative control it starts a
+# fresh HOL Light (hol.sh), loads the profile recipe from replay/<profile>.ml (byte-identical to Hearth's
+# recipe; sha256 in the README), then the file, and prints each headline theorem. A leaf passes when its output
+# has no "Exception" or "Error" line and every binding it defines is a theorem; a control passes when it raises.
+# This is a convenience check and weaker than Hearth's (no per-binding statement matching or receipts).
+#
+# Environment:
+#   HOLDIR       HOL Light checkout at commit 2a1cea8f1cb7f3885a60d947ba06eabac6ec1d32, built with `make`
+#   PLAIN_JOBS   parallel replays (default 2). A heavy replay loads Multivariate cold: about 25 minutes and 3 GB each.
+set -u
+cd "$(dirname "$0")/.." || exit 2
+if [ "${1:-}" = --one ]; then   # internal: card kind file dir profile
+  shift; card=$1 kind=$2 file=$3 dir=$4 profile=$5
+  log="$OUT/logs/$card.${file%.ml}.log"
+  names=$(grep -oE '^let +[A-Za-z0-9_]+ *=' "$dir/$file" | sed -E 's/^let +([A-Za-z0-9_]+).*/\1/')
+  { echo "loadt \"$PWD/replay/$profile.ml\";;"
+    echo "loadt \"$PWD/$dir/$file\";;"
+    for n in $names; do echo "$n;;"; done; } > "$log.in"
+  (cd "$HOLDIR" && LINE_EDITOR=env ./hol.sh < "$log.in") > "$log" 2>&1
+  if grep -qE '^(Exception|Error)|Exception:|Error:' "$log"; then got=raised; else got=clean; fi
+  case $kind/$got in leaf/clean|control/raised) ok=ok ;; *) ok=BAD ;; esac
+  printf '%s\t%s\t%s\t%s\t%s\n' "$card" "$kind" "$file" "$got" "$ok" >> "$OUT/plain.tsv"
+  exit 0
+fi
+OUT=${1:?usage: bin/replay-plain OUTDIR [CARD...]}; shift
+: "${HOLDIR:?set HOLDIR to a built HOL Light checkout at 2a1cea8}"
+case $OUT in /*) ;; *) OUT=$PWD/$OUT ;; esac
+[ -e "$OUT" ] && { echo "replay-plain: $OUT exists; give a new directory" >&2; exit 2; }
+mkdir -p "$OUT/logs" || exit 2
+export OUT HOLDIR
+ONLY=" $* "
+: > "$OUT/plain.tsv"
+while IFS=$'\t' read -r card dir profile leaves controls headline; do
+  case $card in '#'*|'') continue ;; esac
+  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
+  for f in ${leaves//,/ }; do echo "$card leaf $f $dir $profile"; done
+  for f in ${controls//,/ }; do echo "$card control $f $dir $profile"; done
+done < cards.tsv | xargs -P "${PLAIN_JOBS:-2}" -L 1 "$PWD/bin/replay-plain" --one
+status=0
+while IFS=$'\t' read -r card dir profile rest; do
+  case $card in '#'*|'') continue ;; esac
+  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
+  bad=$(awk -F'\t' -v c="$card" '$1 == c && $5 != "ok"' "$OUT/plain.tsv" | grep -c .)
+  n=$(awk -F'\t' -v c="$card" '$1 == c' "$OUT/plain.tsv" | grep -c .)
+  if [ "$bad" = 0 ]; then w=PASS; else w=FAIL; status=1; fi
+  echo "PLAIN $card $profile $w: $((n - bad))/$n files behaved as expected (leaves clean, controls raised)"
+done < cards.tsv | tee "$OUT/summary.txt"
+exit $status

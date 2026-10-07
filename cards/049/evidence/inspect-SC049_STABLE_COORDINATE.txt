@@ -1,0 +1,10 @@
+PASSED stable_coordinate_049_assembled.ml: 30/30 bindings proved, 0 new axioms, eval 3.8s (light)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/049/stable_coordinate_049_assembled.ml sha=42ff8c13c906
+  SC049_STABLE_COORDINATE: proved (source conclusion matched; hypotheses empty) source_line=321
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: (!z. SC_PSI(SC_PHI z) = z) /\ (!y. SC_PHI(SC_PSI y) = y) /\ (!p s u n v. SC_F(SC_PHI(p,s,u,n,v)) = p)
+binding_counts: proved=30 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=30 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=b081e6da1c82
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/049/stable_coordinate_049_assembled/20261007T200304Z-633222-stable_coordinate_049_assembled-4cf76f/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/049/stable_coordinate_049_assembled/20261007T200304Z-633222-stable_coordinate_049_assembled-4cf76f

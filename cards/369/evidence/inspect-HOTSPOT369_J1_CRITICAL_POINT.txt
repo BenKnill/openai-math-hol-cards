@@ -1,0 +1,10 @@
+PASSED hotspots369_bessel_deriv.ml: 27/27 bindings proved, 0 new axioms, eval 7.6s (heavy)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/369/hotspots369_bessel_deriv.ml sha=ffc9f316a692
+  HOTSPOT369_J1_CRITICAL_POINT: proved (source conclusion matched; hypotheses empty) source_line=513
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: (!x. &1 < x /\ x < &2 ==> (bessel_j1 has_real_derivative bessel_dj1 x) (atreal x)) /\ &0 < bessel_dj1(&18411 / &10000) /\ bessel_dj1(&18412 / &10000) < &0 /\ (?x. &18411 / &10000 < x /\ x < &18412 / &10000 /\ (bessel_j1 has_real_derivative &0) (atreal x))
+binding_counts: proved=27 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=27 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=8bc4c20b5772
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/369/hotspots369_bessel_deriv/20261007T200420Z-634496-hotspots369_bessel_deriv-a12c41/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/369/hotspots369_bessel_deriv/20261007T200420Z-634496-hotspots369_bessel_deriv-a12c41

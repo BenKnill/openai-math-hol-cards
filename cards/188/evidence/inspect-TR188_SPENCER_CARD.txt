@@ -1,0 +1,10 @@
+PASSED triangle188.ml: 7/7 bindings proved, 0 new axioms, eval 2.1s (heavy)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/188/triangle188.ml sha=02b95440d527
+  TR188_SPENCER_CARD: proved (source conclusion matched; hypotheses empty) source_line=108
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: (!D. &0 <= D ==> inv(sqrt(&1 + &2 * D * &0)) = &1 /\ !x. &0 <= x ==> ((\t. inv(sqrt(&1 + &2 * D * t))) has_real_derivative (--D * inv(sqrt(&1 + &2 * D * x)) pow 3)) (atreal x)) /\ ((\n. ((&n pow 2 / &2) * inv(sqrt(&1 + &2 * &n))) / (&n * sqrt(&n))) ---> inv(&2 * sqrt(&2))) sequentially
+binding_counts: proved=7 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=7 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=ebf55401714f
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/188/triangle188/20261007T200351Z-634162-triangle188-8d232d/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/188/triangle188/20261007T200351Z-634162-triangle188-8d232d

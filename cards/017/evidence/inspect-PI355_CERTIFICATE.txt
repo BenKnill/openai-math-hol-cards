@@ -1,0 +1,10 @@
+PASSED pi355_017.ml: 8/8 bindings proved, 0 new axioms, eval 2.1s (heavy)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/017/pi355_017.ml sha=221c1ee9d783
+  PI355_CERTIFICATE: proved (source conclusion matched; hypotheses empty) source_line=112
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: abs(pi - &355 / &113) < &27 / &10 pow 8 /\ --(&302 / &10 pow 7) < sin(&355) /\ sin(&355) < --(&301 / &10 pow 7) /\ &245 / &10 < inv(&355 pow 3 * sin(&355) pow 2) /\ inv(&355 pow 3 * sin(&355) pow 2) < &247 / &10 /\ &24 < sum(1..355) (\n. inv(&n pow 3 * sin(&n) pow 2))
+binding_counts: proved=8 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=8 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=d5fa7c562626
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/017/pi355_017/20261007T200345Z-634004-pi355_017-8f6a2e/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/017/pi355_017/20261007T200345Z-634004-pi355_017-8f6a2e

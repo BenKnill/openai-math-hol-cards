@@ -1,0 +1,10 @@
+PASSED crouzeix325_two_xy.ml: 1/1 bindings proved, 0 new axioms, eval 0.4s (light)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/325/crouzeix325_two_xy.ml sha=32709f942492
+  C325_TWO_XY: proved (source conclusion matched; hypotheses empty) source_line=17
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: !x y. x pow 2 + y pow 2 = &1 ==> abs(&2 * x * y) <= &1
+binding_counts: proved=1 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=1 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=603b795eb802
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/325/crouzeix325_two_xy/20261007T200341Z-633923-crouzeix325_two_xy-1ec146/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/325/crouzeix325_two_xy/20261007T200341Z-633923-crouzeix325_two_xy-1ec146

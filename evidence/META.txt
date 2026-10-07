@@ -1,0 +1,7 @@
+warm_dir=bluestar26:~/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78
+warm_hearth=hol-hearth 02443c8, HOL Light 2a1cea8
+cold_hearth=32862cd (02443c8 plus one unrelated commit, 68d79ad, accepting a Btrfs superblock device), on the OrbStack Linux machine dev
+cold_image=hol-hearth-cold-checker:cards-32862cd (built from that checkout, OCaml 5.3.0, camlp5 8.03.01)
+cold_hol=2a1cea8
+cold_dir=dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78
+cold_cmd=HEARTH_CHECKOUT=~/src/hol-hearth-rc COLD_IMAGE=hol-hearth-cold-checker:cards-32862cd COLD_DOCKER='mac docker' COLD_STREAM=1 COLD_JOBS=3 bin/cold-cards WARMDIR OUTDIR

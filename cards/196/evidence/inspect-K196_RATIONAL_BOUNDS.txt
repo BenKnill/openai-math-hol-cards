@@ -1,0 +1,10 @@
+PASSED kaplansky196_bounds.ml: 1/1 bindings proved, 0 new axioms, eval 0.5s (light)
+source: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/cards/196/kaplansky196_bounds.ml sha=a63d9ae89e0d
+  K196_RATIONAL_BOUNDS: proved (source conclusion matched; hypotheses empty) source_line=18
+    verification_kind: kernel_conclusion_and_empty_hypotheses
+    source_statement: let q = &128 and v = &16513 and p = &129 / &16513 in q / (q + &1) + &3 * p pow 2 + &12 / (q + &1) pow 2 = &500731261911 / &504183783481 /\ &500731261911 / &504183783481 < &149 / &150 /\ (&2 + v * p pow 2 + &12 * p pow 2) / &5 = &820350863 / &1363395845 /\ &820350863 / &1363395845 < &149 / &150
+binding_counts: proved=1 failed=0 printed_unprobed=0 missing=0 unknown=0
+successful_probe_counts: conclusion_checked=1 thm_type_only=0 unknown=0
+inputs: 1 files; closure_sha=7c4633ae52ac
+receipt: /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/196/kaplansky196_bounds/20261007T200333Z-633719-kaplansky196_bounds-09e100/transcript.log.json
+NEXT: /home/bluestar/src/hol-hearth/hearth inspect /home/bluestar/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78/out/runs/196/kaplansky196_bounds/20261007T200333Z-633719-kaplansky196_bounds-09e100
