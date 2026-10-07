@@ -1,0 +1,13 @@
+# card	dir	profile	leaves (comma-separated, expected PASSED)	controls (comma-separated, expected FAILED)	headline binding
+158	cards/158	light	moser_certificate.ml	negctl_moser_certificate_shift280.ml	MOSER_PLACEMENT_CERTIFICATE
+049	cards/049	light	stable_coordinate_049.ml,stable_coordinate_049_assembled.ml	negctl_stable_coordinate_049_wrong_f.ml	SC049_STABLE_COORDINATE
+353	cards/353	light	affine_box_353.ml	negctl_affine_box_353_corner_shifted.ml	AB353_FACE_SIGNS
+354-light	cards/354	light	torus354_light.ml	negctl_torus354_light_4pi_over_80.ml	T354_SWITCH_RADII
+354-pi	cards/354	heavy	torus354_pi.ml	negctl_torus354_4pi_over_80.ml	T354_PI_SWITCHES
+196	cards/196	light	kaplansky196_bounds.ml	negctl_kaplansky196_below_99_100.ml	K196_RATIONAL_BOUNDS
+028	cards/028	light	moat028_translation.ml	negctl_moat028_empty_set_allowed.ml	M028_FINITE_NOT_TRANSLATION_INVARIANT
+325	cards/325	light	crouzeix325_two_xy.ml	negctl_crouzeix325_half.ml	C325_TWO_XY
+017	cards/017	heavy	pi355_017.ml	negctl_pi355_017_gt25.ml	PI355_CERTIFICATE
+188	cards/188	heavy	triangle188.ml	negctl_triangle188_one_partner.ml	TR188_SPENCER_CARD
+369	cards/369	heavy	hotspots369_bessel.ml,hotspots369_bessel_root.ml,hotspots369_bessel_deriv.ml	negctl_hotspots369_pos_at_18412.ml,negctl_hotspots369_root_shifted.ml,negctl_hotspots369_deriv_is_j0.ml	HOTSPOT369_J1_CRITICAL_POINT
+150	cards/150	heavy	billiards150_corner.ml	negctl_billiards150_at_most_3.ml	T150_CORNER_BOUNCE_COUNT

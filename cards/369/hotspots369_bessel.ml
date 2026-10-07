@@ -1,0 +1,302 @@
+(* ========================================================================= *)
+(* Family 369 of the OpenAI math release: "Strict hot spots and absence of   *)
+(* interior critical points on smooth simply connected planar domains"       *)
+(* (September 24, 2026). Disk illustration for the film: the first Neumann   *)
+(* mode of the unit disk is J_1(j r) cos(theta) with j = j'_{1,1} ~ 1.84118, *)
+(* the first positive zero of J_1'.                                          *)
+(* Profile: heavy (real infinite series, real_infsum, limits).               *)
+(*                                                                            *)
+(* Definitions made here (standard power series, DLMF 10.2.2 with nu = 0, 1): *)
+(*   bessel_j0 x = sum_{k>=0} (-1)^k (x^2/4)^k / (k!)^2                       *)
+(*   bessel_j1 x = sum_{k>=0} (-1)^k (x/2) (x^2/4)^k / (k! (k+1)!)            *)
+(*   bessel_dj1 x = bessel_j0 x - bessel_j1 x / x     (DLMF 10.6.2: J_1')     *)
+(* each infinite sum being HOL's real_infsum (from 0).                        *)
+(*                                                                            *)
+(* Checked here:                                                              *)
+(*   BESSEL_J0_SUMMABLE, BESSEL_J1_SUMMABLE  both series converge for         *)
+(*     |x| <= 2 (ratio test), so bessel_j0, bessel_j1 are their true sums.    *)
+(*   BESSEL_DJ1_SUMS  for 0 < |x| <= 2, bessel_dj1 x is the sum of the        *)
+(*     termwise series sum_k (-1)^k (2k+1) (x^2/4)^k / (2 k! (k+1)!).         *)
+(*   BESSEL_DJ1_PARTIAL_BOUNDS  alternating-series tail bounds: for those x,  *)
+(*     the partial sum through term 2 + M is <= bessel_dj1 x when M is odd    *)
+(*     and >= it when M is even (tail terms decrease in size from k = 2 on).  *)
+(*   HOTSPOT369_SIGN_CHANGE (headline)                                        *)
+(*     bessel_dj1(1.8411) > 0 > bessel_dj1(1.8412),                           *)
+(*     from exact rational partial sums through k = 5 and k = 6               *)
+(*     (about +3.37e-5 and -6.64e-6; true values +3.437e-5, -6.653e-6).       *)
+(*                                                                            *)
+(* NOT checked here, and not connected to anything in HOL Light:              *)
+(*   - that these series are "the" Bessel functions (they are the standard    *)
+(*     definitions; HOL Light has no Bessel library);                         *)
+(*   - that bessel_dj1 is the derivative of bessel_j1 (term-by-term           *)
+(*     differentiation; here J_1' is DEFINED as J_0 - J_1/x);                 *)
+(*   - continuity of bessel_dj1, hence the existence of a zero between        *)
+(*     1.8411 and 1.8412 (only the sign change is certified), and that this   *)
+(*     zero is the FIRST positive zero of J_1';                               *)
+(*   - anything about the Neumann eigenproblem on the disk or the hot spots   *)
+(*     theorem itself (Lean-formalized in the release, lean/docs/369.md).     *)
+(* ========================================================================= *)
+
+let bessel_j0_term = new_definition
+ `bessel_j0_term (x:real) k =
+    (--(&1)) pow k * (x pow 2 / &4) pow k / (&(FACT k) * &(FACT k))`;;
+
+let bessel_j1_term = new_definition
+ `bessel_j1_term (x:real) k =
+    (--(&1)) pow k * (x / &2) * (x pow 2 / &4) pow k /
+    (&(FACT k) * &(FACT(SUC k)))`;;
+
+let bessel_dj1_term = new_definition
+ `bessel_dj1_term (x:real) k =
+    (--(&1)) pow k * (&2 * &k + &1) * (x pow 2 / &4) pow k /
+    (&2 * &(FACT k) * &(FACT(SUC k)))`;;
+
+let bessel_j0 = new_definition
+ `bessel_j0 (x:real) = real_infsum (from 0) (bessel_j0_term x)`;;
+
+let bessel_j1 = new_definition
+ `bessel_j1 (x:real) = real_infsum (from 0) (bessel_j1_term x)`;;
+
+let bessel_dj1 = new_definition
+ `bessel_dj1 (x:real) = bessel_j0 x - bessel_j1 x / x`;;
+
+(* ------------------------------------------------------------------------- *)
+(* Term recurrences.                                                         *)
+(* ------------------------------------------------------------------------- *)
+
+let BESSEL_STEP_TAC defn =
+  REPEAT GEN_TAC THEN
+  REWRITE_TAC[defn; FACT; real_pow; GSYM REAL_OF_NUM_MUL; GSYM REAL_OF_NUM_SUC] THEN
+  MP_TAC(SPEC `k:num` FACT_NZ) THEN REWRITE_TAC[GSYM REAL_OF_NUM_EQ] THEN
+  MP_TAC(SPEC `k:num` REAL_POS) THEN
+  SPEC_TAC(`&(FACT k)`,`f:real`) THEN SPEC_TAC(`&k`,`n:real`) THEN
+  SPEC_TAC(`(--(&1)) pow k`,`s:real`) THEN
+  SPEC_TAC(`(x pow 2 / &4) pow k`,`p:real`) THEN
+  CONV_TAC REAL_FIELD;;
+
+let BESSEL_J0_STEP = prove
+ (`!x k. bessel_j0_term x (SUC k) =
+         bessel_j0_term x k * (--(x pow 2 / &4) / ((&k + &1) * (&k + &1)))`,
+  BESSEL_STEP_TAC bessel_j0_term);;
+
+let BESSEL_J1_STEP = prove
+ (`!x k. bessel_j1_term x (SUC k) =
+         bessel_j1_term x k * (--(x pow 2 / &4) / ((&k + &1) * (&k + &2)))`,
+  BESSEL_STEP_TAC bessel_j1_term);;
+
+let BESSEL_DJ1_STEP = prove
+ (`!x k. bessel_dj1_term x (SUC k) =
+         bessel_dj1_term x k *
+         (--(x pow 2 / &4) /
+          (((&2 * &k + &1) * (&k + &1) * (&k + &2)) / (&2 * &k + &3)))`,
+  BESSEL_STEP_TAC bessel_dj1_term);;
+
+let BESSEL_COMBINE = prove
+ (`!x k. ~(x = &0)
+         ==> bessel_j0_term x k - bessel_j1_term x k / x = bessel_dj1_term x k`,
+  REPEAT GEN_TAC THEN
+  REWRITE_TAC[bessel_j0_term; bessel_j1_term; bessel_dj1_term; FACT;
+              GSYM REAL_OF_NUM_MUL; GSYM REAL_OF_NUM_SUC] THEN
+  MP_TAC(SPEC `k:num` FACT_NZ) THEN REWRITE_TAC[GSYM REAL_OF_NUM_EQ] THEN
+  MP_TAC(SPEC `k:num` REAL_POS) THEN
+  SPEC_TAC(`&(FACT k)`,`f:real`) THEN SPEC_TAC(`&k`,`n:real`) THEN
+  SPEC_TAC(`(--(&1)) pow k`,`s:real`) THEN
+  SPEC_TAC(`(x pow 2 / &4) pow k`,`p:real`) THEN
+  CONV_TAC REAL_FIELD);;
+
+(* ------------------------------------------------------------------------- *)
+(* Summability by the ratio test.                                            *)
+(* ------------------------------------------------------------------------- *)
+
+let RATIO_SUMMABLE = prove
+ (`!a r N. (!k. N <= k ==> a(SUC k) = a k * r k /\ abs(r k) <= &1 / &2)
+           ==> real_summable (from 0) (a:num->real)`,
+  REPEAT STRIP_TAC THEN REWRITE_TAC[real_summable] THEN
+  MATCH_MP_TAC REAL_SERIES_RATIO THEN
+  MAP_EVERY EXISTS_TAC [`&1 / &2`; `N:num`] THEN
+  CONJ_TAC THENL [REAL_ARITH_TAC; ALL_TAC] THEN
+  REWRITE_TAC[GE] THEN X_GEN_TAC `n:num` THEN DISCH_TAC THEN
+  FIRST_X_ASSUM(MP_TAC o SPEC `n:num`) THEN ASM_REWRITE_TAC[] THEN
+  STRIP_TAC THEN ASM_REWRITE_TAC[REAL_ABS_MUL] THEN
+  MP_TAC(SPECL [`abs((a:num->real) n)`; `abs((r:num->real) n)`; `&1 / &2`]
+               REAL_LE_LMUL) THEN
+  ASM_REWRITE_TAC[REAL_ABS_POS] THEN REAL_ARITH_TAC);;
+
+let RATIO_BOUND = prove
+ (`!x d. abs x <= &2 /\ &2 <= d ==> abs(--(x pow 2 / &4) / d) <= &1 / &2`,
+  REPEAT STRIP_TAC THEN
+  SUBGOAL_THEN `x pow 2 <= &4` ASSUME_TAC THENL
+   [SUBGOAL_THEN `abs x pow 2 <= &2 pow 2` MP_TAC THENL
+     [MATCH_MP_TAC REAL_POW_LE2 THEN ASM_REAL_ARITH_TAC;
+      REWRITE_TAC[REAL_POW2_ABS] THEN CONV_TAC REAL_RAT_REDUCE_CONV THEN
+      REAL_ARITH_TAC];
+    ALL_TAC] THEN
+  REWRITE_TAC[REAL_ABS_DIV] THEN
+  ASM_SIMP_TAC[REAL_LE_LDIV_EQ; REAL_ARITH `&2 <= d ==> &0 < abs d`] THEN
+  MP_TAC(SPEC `x:real` REAL_LE_POW_2) THEN ASM_REAL_ARITH_TAC);;
+
+let BESSEL_J0_SUMMABLE = prove
+ (`!x. abs x <= &2 ==> real_summable (from 0) (bessel_j0_term x)`,
+  REPEAT STRIP_TAC THEN MATCH_MP_TAC RATIO_SUMMABLE THEN
+  MAP_EVERY EXISTS_TAC
+   [`\k. --(x pow 2 / &4) / ((&k + &1) * (&k + &1))`; `1`] THEN
+  X_GEN_TAC `k:num` THEN DISCH_TAC THEN REWRITE_TAC[BESSEL_J0_STEP] THEN
+  MATCH_MP_TAC RATIO_BOUND THEN ASM_REWRITE_TAC[] THEN
+  SUBGOAL_THEN `&1 <= &k` MP_TAC THENL
+   [ASM_REWRITE_TAC[REAL_OF_NUM_LE]; ALL_TAC] THEN
+  MP_TAC(SPEC `&k` REAL_LE_SQUARE) THEN REAL_ARITH_TAC);;
+
+let BESSEL_J1_SUMMABLE = prove
+ (`!x. abs x <= &2 ==> real_summable (from 0) (bessel_j1_term x)`,
+  REPEAT STRIP_TAC THEN MATCH_MP_TAC RATIO_SUMMABLE THEN
+  MAP_EVERY EXISTS_TAC
+   [`\k. --(x pow 2 / &4) / ((&k + &1) * (&k + &2))`; `0`] THEN
+  X_GEN_TAC `k:num` THEN DISCH_TAC THEN REWRITE_TAC[BESSEL_J1_STEP] THEN
+  MATCH_MP_TAC RATIO_BOUND THEN ASM_REWRITE_TAC[] THEN
+  MP_TAC(SPEC `&k` REAL_LE_SQUARE) THEN MP_TAC(SPEC `k:num` REAL_POS) THEN
+  REAL_ARITH_TAC);;
+
+let BESSEL_DJ1_SUMS = prove
+ (`!x. ~(x = &0) /\ abs x <= &2
+       ==> (bessel_dj1_term x real_sums bessel_dj1 x) (from 0)`,
+  REPEAT STRIP_TAC THEN REWRITE_TAC[bessel_dj1; bessel_j0; bessel_j1] THEN
+  SUBGOAL_THEN
+   `bessel_dj1_term x = (\k. bessel_j0_term x k - bessel_j1_term x k / x)`
+  SUBST1_TAC THENL
+   [REWRITE_TAC[FUN_EQ_THM] THEN ASM_SIMP_TAC[BESSEL_COMBINE]; ALL_TAC] THEN
+  MATCH_MP_TAC REAL_SERIES_SUB THEN CONJ_TAC THENL
+   [REWRITE_TAC[ETA_AX] THEN
+    ASM_SIMP_TAC[REAL_SUMS_INFSUM; BESSEL_J0_SUMMABLE];
+    REWRITE_TAC[real_div] THEN MATCH_MP_TAC REAL_SERIES_RMUL THEN
+    REWRITE_TAC[ETA_AX] THEN
+    ASM_SIMP_TAC[REAL_SUMS_INFSUM; BESSEL_J1_SUMMABLE]]);;
+
+(* ------------------------------------------------------------------------- *)
+(* Alternating structure of the J_1' series from k = 2 on.                   *)
+(* ------------------------------------------------------------------------- *)
+
+let BESSEL_DJ1_MONO = prove
+ (`!x k. abs x <= &2 /\ 1 <= k
+         ==> abs(bessel_dj1_term x (SUC k)) <= abs(bessel_dj1_term x k)`,
+  REPEAT STRIP_TAC THEN REWRITE_TAC[BESSEL_DJ1_STEP; REAL_ABS_MUL] THEN
+  MP_TAC(SPECL [`x:real`;
+    `((&2 * &k + &1) * (&k + &1) * (&k + &2)) / (&2 * &k + &3)`] RATIO_BOUND) THEN
+  ANTS_TAC THENL
+   [ASM_REWRITE_TAC[] THEN
+    SUBGOAL_THEN `&0 < &2 * &k + &3` ASSUME_TAC THENL
+     [MP_TAC(SPEC `k:num` REAL_POS) THEN REAL_ARITH_TAC; ALL_TAC] THEN
+    ASM_SIMP_TAC[REAL_LE_RDIV_EQ] THEN
+    SUBGOAL_THEN `&1 <= &k` ASSUME_TAC THENL
+     [ASM_REWRITE_TAC[REAL_OF_NUM_LE]; ALL_TAC] THEN
+    SUBGOAL_THEN `&0 <= &k * (&k - &1) /\ &0 <= &k * &k * &k`
+    MP_TAC THENL
+     [CONJ_TAC THEN REPEAT(MATCH_MP_TAC REAL_LE_MUL THEN CONJ_TAC) THEN
+      ASM_REAL_ARITH_TAC;
+      ASM_REAL_ARITH_TAC];
+    ALL_TAC] THEN
+  DISCH_TAC THEN
+  MP_TAC(SPECL [`abs(bessel_dj1_term x k)`;
+                `abs(--(x pow 2 / &4) /
+                  (((&2 * &k + &1) * (&k + &1) * (&k + &2)) / (&2 * &k + &3)))`;
+                `&1 / &2`] REAL_LE_LMUL) THEN
+  ASM_REWRITE_TAC[REAL_ABS_POS] THEN
+  MP_TAC(SPEC `bessel_dj1_term x k` REAL_ABS_POS) THEN REAL_ARITH_TAC);;
+
+let BESSEL_DJ1_MAGNITUDE_POS = prove
+ (`!x k. &0 <= (&2 * &k + &1) * (x pow 2 / &4) pow k /
+              (&2 * &(FACT k) * &(FACT(SUC k)))`,
+  REPEAT GEN_TAC THEN MATCH_MP_TAC REAL_LE_MUL THEN CONJ_TAC THENL
+   [MP_TAC(SPEC `k:num` REAL_POS) THEN REAL_ARITH_TAC; ALL_TAC] THEN
+  MATCH_MP_TAC REAL_LE_DIV THEN CONJ_TAC THENL
+   [MATCH_MP_TAC REAL_POW_LE THEN MATCH_MP_TAC REAL_LE_DIV THEN
+    REWRITE_TAC[REAL_LE_POW_2] THEN REAL_ARITH_TAC;
+    SIMP_TAC[REAL_LE_MUL; REAL_POS]]);;
+
+let BESSEL_DJ1_SIGNS = prove
+ (`!x k. (EVEN k ==> &0 <= bessel_dj1_term x k) /\
+         (ODD k ==> bessel_dj1_term x k <= &0)`,
+  REPEAT GEN_TAC THEN REWRITE_TAC[bessel_dj1_term; REAL_POW_NEG; REAL_POW_ONE;
+                                  GSYM NOT_EVEN] THEN
+  MP_TAC(SPECL [`x:real`; `k:num`] BESSEL_DJ1_MAGNITUDE_POS) THEN
+  ASM_CASES_TAC `EVEN k` THEN ASM_REWRITE_TAC[] THEN REAL_ARITH_TAC);;
+
+(* ------------------------------------------------------------------------- *)
+(* Partial-sum bounds (alternating series, HOL's ALTERNATING_SUM_BOUNDS).     *)
+(* ------------------------------------------------------------------------- *)
+
+let BESSEL_DJ1_PARTIAL_BOUNDS = prove
+ (`!x M. ~(x = &0) /\ abs x <= &2
+         ==> (ODD M
+              ==> sum(0..1) (bessel_dj1_term x) +
+                  sum(0..M) (\n. bessel_dj1_term x (n + 2)) <= bessel_dj1 x) /\
+             (EVEN M
+              ==> bessel_dj1 x <=
+                  sum(0..1) (bessel_dj1_term x) +
+                  sum(0..M) (\n. bessel_dj1_term x (n + 2)))`,
+  REPEAT GEN_TAC THEN STRIP_TAC THEN
+  ABBREV_TAC `e = \n. bessel_dj1_term x (n + 2)` THEN
+  SUBGOAL_THEN
+   `!m n. (EVEN m ==> &0 <= sum(m..n) e /\ sum(m..n) e <= e m) /\
+          (ODD m ==> e m <= sum(m..n) e /\ sum(m..n) e <= &0)`
+  ASSUME_TAC THENL
+   [MATCH_MP_TAC ALTERNATING_SUM_BOUNDS THEN EXPAND_TAC "e" THEN
+    REWRITE_TAC[ARITH_RULE `SUC n + 2 = SUC(n + 2)`] THEN
+    REPEAT CONJ_TAC THEN X_GEN_TAC `n:num` THENL
+     [MATCH_MP_TAC BESSEL_DJ1_MONO THEN ASM_REWRITE_TAC[] THEN ARITH_TAC;
+      DISCH_TAC THEN MATCH_MP_TAC(CONJUNCT1(SPEC_ALL BESSEL_DJ1_SIGNS)) THEN
+      ASM_REWRITE_TAC[EVEN_ADD; ARITH];
+      DISCH_TAC THEN MATCH_MP_TAC(CONJUNCT2(SPEC_ALL BESSEL_DJ1_SIGNS)) THEN
+      ASM_REWRITE_TAC[ODD_ADD; ARITH]];
+    ALL_TAC] THEN
+  SUBGOAL_THEN
+   `((\n. sum(0..n) e) --->
+     bessel_dj1 x - sum(0..1) (bessel_dj1_term x)) sequentially`
+  ASSUME_TAC THENL
+   [REWRITE_TAC[GSYM REAL_SERIES_FROM] THEN EXPAND_TAC "e" THEN
+    REWRITE_TAC[REAL_SUMS_REINDEX] THEN CONV_TAC NUM_REDUCE_CONV THEN
+    MP_TAC(ISPECL [`bessel_dj1_term x`; `bessel_dj1 x`; `0`; `2`]
+                  REAL_SUMS_OFFSET) THEN
+    CONV_TAC NUM_REDUCE_CONV THEN ASM_SIMP_TAC[BESSEL_DJ1_SUMS];
+    ALL_TAC] THEN
+  CONJ_TAC THEN DISCH_TAC THEN
+  RULE_ASSUM_TAC(REWRITE_RULE[GSYM NOT_EVEN]) THENL
+   [MATCH_MP_TAC(REAL_ARITH `b <= l - a ==> a + b <= l`) THEN
+    MATCH_MP_TAC(ISPEC `sequentially` REALLIM_LBOUND);
+    MATCH_MP_TAC(REAL_ARITH `l - a <= b ==> l <= a + b`) THEN
+    MATCH_MP_TAC(ISPEC `sequentially` REALLIM_UBOUND)] THEN
+  EXISTS_TAC `\n. sum(0..n) (e:num->real)` THEN
+  ASM_REWRITE_TAC[TRIVIAL_LIMIT_SEQUENTIALLY; EVENTUALLY_SEQUENTIALLY] THEN
+  EXISTS_TAC `M:num` THEN X_GEN_TAC `n:num` THEN DISCH_TAC THEN
+  MP_TAC(ISPECL [`e:num->real`; `0`; `M:num`; `n:num`] SUM_COMBINE_R) THEN
+  ASM_REWRITE_TAC[LE_0] THEN DISCH_THEN(SUBST1_TAC o SYM) THEN
+  FIRST_X_ASSUM(MP_TAC o SPECL [`M + 1`; `n:num`] o
+                check (is_forall o concl)) THEN
+  ASM_REWRITE_TAC[EVEN_ADD; GSYM NOT_EVEN; ARITH] THEN REAL_ARITH_TAC);;
+
+(* ------------------------------------------------------------------------- *)
+(* Headline: J_1' changes sign on [1.8411, 1.8412].                          *)
+(* ------------------------------------------------------------------------- *)
+
+let BESSEL_EVAL_TAC =
+  CONV_TAC(ONCE_DEPTH_CONV EXPAND_SUM_CONV) THEN
+  REWRITE_TAC[bessel_dj1_term] THEN CONV_TAC NUM_REDUCE_CONV THEN
+  CONV_TAC(DEPTH_CONV NUM_FACT_CONV) THEN
+  CONV_TAC REAL_RAT_REDUCE_CONV;;
+
+let BESSEL_DJ1_POS_AT_18411 = prove
+ (`&0 < bessel_dj1(&18411 / &10000)`,
+  MP_TAC(SPECL [`&18411 / &10000`; `3`] BESSEL_DJ1_PARTIAL_BOUNDS) THEN
+  CONV_TAC REAL_RAT_REDUCE_CONV THEN REWRITE_TAC[ARITH] THEN
+  MATCH_MP_TAC(REAL_ARITH `&0 < a ==> a <= b ==> &0 < b`) THEN
+  BESSEL_EVAL_TAC);;
+
+let BESSEL_DJ1_NEG_AT_18412 = prove
+ (`bessel_dj1(&18412 / &10000) < &0`,
+  MP_TAC(SPECL [`&18412 / &10000`; `4`] BESSEL_DJ1_PARTIAL_BOUNDS) THEN
+  CONV_TAC REAL_RAT_REDUCE_CONV THEN REWRITE_TAC[ARITH] THEN
+  MATCH_MP_TAC(REAL_ARITH `a < &0 ==> b <= a ==> b < &0`) THEN
+  BESSEL_EVAL_TAC);;
+
+let HOTSPOT369_SIGN_CHANGE = prove
+ (`&0 < bessel_dj1(&18411 / &10000) /\ bessel_dj1(&18412 / &10000) < &0`,
+  REWRITE_TAC[BESSEL_DJ1_POS_AT_18411; BESSEL_DJ1_NEG_AT_18412]);;

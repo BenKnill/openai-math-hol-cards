@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# check-remote [CARD...]
+#
+# Copies the cards to a warm Hearth host over SSH, runs bin/run-cards there as a detached job, waits for it,
+# and prints one verdict line per card. Defaults are Ben's setup (bluestar26); override them for yours:
+#
+#   REMOTE_SSH     command that runs one shell string on the host
+#                  (default: ALLOW_METERED=1 ~/Documents/QUUD1GR-tailscale/bin/b26-ssh)
+#   REMOTE_BASE    work directory on the host, relative to its home (default: lanes/math-hol-cards/work)
+#   REMOTE_HEARTH  hearth command on the host (default: ~/src/hol-hearth/hearth)
+#   REMOTE_RUNTIME HOL_WORKBENCH_RUNTIME_CONFIG on the host (default: ~/hearth/runtime.toml)
+#   REMOTE_LANE    1 to run under ~/lanes/bin/lane-run / lane-wait (default 1), 0 to run in the SSH session
+#
+# Each call uses a fresh directory REMOTE_BASE/<UTC stamp>-<git rev>, so nothing is overwritten.
+set -u
+cd "$(dirname "$0")/.." || exit 2
+SSH=${REMOTE_SSH:-env ALLOW_METERED=1 $HOME/Documents/QUUD1GR-tailscale/bin/b26-ssh}
+BASE=${REMOTE_BASE:-lanes/math-hol-cards/work}
+RH=${REMOTE_HEARTH:-\$HOME/src/hol-hearth/hearth}
+RT=${REMOTE_RUNTIME:-\$HOME/hearth/runtime.toml}
+LANE=${REMOTE_LANE:-1}
+REV=$(git rev-parse --short HEAD 2>/dev/null || echo nogit)
+git diff --quiet HEAD -- cards cards.tsv bin 2>/dev/null || REV="$REV-dirty"
+STAMP=$(date -u +%Y%m%dT%H%M%SZ)
+DIR="$BASE/$STAMP-$REV"
+UNIT="hol-cards-$STAMP"
+
+COPYFILE_DISABLE=1 tar --no-xattrs -czf - cards.tsv cards bin |$SSH "mkdir -p ~/$DIR && tar xzf - -C ~/$DIR" || { echo "copy failed" >&2; exit 2; }
+ENV="HEARTH_BIN=$RH HOL_WORKBENCH_RUNTIME_CONFIG=$RT"
+if [ "$LANE" = 1 ]; then
+  $SSH "cd ~/$DIR && env $ENV ~/lanes/bin/lane-run $UNIT bin/run-cards out $* >/dev/null" || exit 2
+  while :; do
+    $SSH "~/lanes/bin/lane-wait $UNIT 480 >/dev/null 2>&1"; rc=$?
+    [ $rc = 124 ] || break
+  done
+else
+  $SSH "cd ~/$DIR && env $ENV bin/run-cards out $* >/dev/null"; rc=$?
+fi
+$SSH "cat ~/$DIR/out/summary.txt"
+echo "host directory: ~/$DIR (run roots in out/runs, verdicts in out/verdicts.tsv)"
+exit $rc

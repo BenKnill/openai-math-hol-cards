@@ -1,0 +1,30 @@
+repo_path	source_path	source_sha256	note
+cards/158/moser_certificate.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/158-moser-certificate/moser_certificate.ml	ffc4a20eaad434e8e9febaf626bee55914c285395a5668ccfb1f8f47cfbd8b32	verbatim copy
+cards/158/negctl_moser_certificate_shift280.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/158-moser-certificate/control-shift-280/moser_certificate_shift280.ml	869b1252934910506f240135211426a61890fb42c98387dc7f518dfcb4ef7808	verbatim copy, renamed
+cards/158/gen/gen_certificate.py	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/158-moser-certificate/gen_certificate.py	8937167a737b5b0f94f401af2e6af4acbf712590da89c3edb035928c8f93e695	verbatim copy
+cards/158/gen/gen_hol.py	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/158-moser-certificate/gen_hol.py	9f6a83e0cd47832857645f79c5dc51f737bfa5aeff5a6847e3be40d77570b67b	verbatim copy
+cards/158/gen/certificate.json	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/158-moser-certificate/certificate.json	9a4fe74f139f3e9140b15b9cdddc5a37e4deea92f07b9c370487be2766e47fe8	verbatim copy
+cards/158/gen/control-shift-280/certificate.json	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/158-moser-certificate/control-shift-280/certificate.json	2cd3948bd9dd4ef0d5864e798d4e0f2d377e3fc5ed19c8ee3c1b63485c1f5b8f	verbatim copy
+cards/049/stable_coordinate_049.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/stable_coordinate_049.ml	75278b43c0c97cf277317b93a3199f1f18a158127f52e03bd96ca9da7e5cffea	verbatim copy
+cards/049/stable_coordinate_049_assembled.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/stable_coordinate_049_assembled.ml	42ff8c13c906173c6168680044b34ccdccc9a8786e1e9e5921e08add71f17da9	verbatim copy
+cards/049/negctl_stable_coordinate_049_wrong_f.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/negctl_stable_coordinate_049_wrong_f.ml	42743a88fdea16ad67a96799fac9eace922c58c6a59a0e32214f7a719a86085b	verbatim copy
+cards/353/affine_box_353.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/affine_box_353.ml	511d2ee5d6d51659c18bd5b070f2ca378d6aa6e82409bf0b9e97101cc26e95bd	verbatim copy
+cards/354/torus354_pi.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/torus354_pi.ml	ba4a0ac7cb88eaf075feb5cba385ceabcef66f53282fce08e09e3a1a55f011c2	verbatim copy
+cards/354/negctl_torus354_4pi_over_80.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/negctl_torus354_4pi_over_80.ml	53a0de9bc419b1f6df3f57599de49009939d2e2f69ca439dd10a34d5df9aaff3	verbatim copy
+cards/017/pi355_017.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/pi355_017.ml	221c1ee9d7836b515b5383c686a342d913f1ca19a3c3cad6e4d22b5441b4e2a3	verbatim copy
+cards/017/negctl_pi355_017_gt25.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/negctl_pi355_017_gt25.ml	a40cef517b8b843691acb6fcae0b882684866d97d98ceb8912d11f5353c9e57f	verbatim copy
+cards/188/triangle188.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/triangle188.ml	02b95440d527a664a7361e0e3c828c6659ba825eb57dc277d8c562a266b6b962	verbatim copy
+cards/188/negctl_triangle188_one_partner.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/negctl_triangle188_one_partner.ml	6d25397a50aa0767fee25a2ea8ab0866289407278dd20b31afb5a461790c2376	verbatim copy
+cards/369/hotspots369_bessel.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/hotspots369_bessel.ml	25f4d4fcb4edef75a726a8055a4284f787c436655ed36cb27c159831c5535369	verbatim copy
+cards/369/hotspots369_bessel_root.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/hotspots369_bessel_root.ml	be738e1c156d1a255da2b3ad746e1f3856f97340cb637db93faf8ab2759d2689	verbatim copy
+cards/369/hotspots369_bessel_deriv.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/hotspots369_bessel_deriv.ml	ffc9f316a692b4388978db0da21252bd94cac82d8d106bfb313c937ae4a91e60	verbatim copy
+cards/369/negctl_hotspots369_pos_at_18412.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/negctl_hotspots369_pos_at_18412.ml	369c48d538dc61cbe477e4e4f9570fcc18ea586bf3a628b2bfe0e3917d7b4f8e	verbatim copy
+cards/369/negctl_hotspots369_root_shifted.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/negctl_hotspots369_root_shifted.ml	ac8a4a9e8a54a34f0aa983675c0e1acc5aeac0bf079e5d699ae01f48fb66b1cc	verbatim copy
+cards/369/negctl_hotspots369_deriv_is_j0.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/negctl_hotspots369_deriv_is_j0.ml	654842fee1ea73bcab008cad3fcb37bf2fd1e6f1817b66d0849b72de7ceca18e	verbatim copy
+cards/150/billiards150_corner.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/billiards150_corner.ml	6170a17360263d23be8eff2e93113b2915505ea90650dfc1e8f260240bb7aefc	verbatim copy
+cards/150/negctl_billiards150_at_most_3.ml	/Users/boxer/lanes/math-drop-2026-10-07/b26-hol/negctl_billiards150_at_most_3.ml	01b042a0158cea14001f6322d27779124d07990f2f06b5cf33ffbfb5e1779c9b	verbatim copy
+third_party/openai-math/LICENSE	/Users/boxer/math/LICENSE	c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4	verbatim copy (release commit adc7f124)
+cards/196/kaplansky196_bounds.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/onscreen_light_batch.ml	1d61b1ec6d779afdfd24106ff4fdf46110af4547f15d5b68ef1a59ae0dd5493a	lines 1-5 and 7-23 verbatim, plus a 2-line provenance comment
+cards/354/torus354_light.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/onscreen_light_batch.ml	1d61b1ec6d779afdfd24106ff4fdf46110af4547f15d5b68ef1a59ae0dd5493a	lines 1-5 and 25-95 verbatim, plus a 2-line provenance comment
+cards/028/moat028_translation.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/onscreen_light_batch.ml	1d61b1ec6d779afdfd24106ff4fdf46110af4547f15d5b68ef1a59ae0dd5493a	lines 1-5 and 97-128 verbatim, plus a 2-line provenance comment
+cards/325/crouzeix325_two_xy.ml	/Users/boxer/lanes/math-drop-2026-10-07/hol-pilots/onscreen_light_batch.ml	1d61b1ec6d779afdfd24106ff4fdf46110af4547f15d5b68ef1a59ae0dd5493a	lines 1-5 and 130-145 verbatim, plus a 2-line provenance comment

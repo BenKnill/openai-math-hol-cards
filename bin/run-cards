@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# run-cards OUTDIR [CARD...]
+#
+# Runs every proof leaf and negative control listed in cards.tsv through Hearth (warm HOL Light) on THIS
+# machine, and prints one verdict line per card. A card is PASS when every leaf is PASSED and every
+# negative control is FAILED. Anything else (a leaf that fails, a control that passes, REFUSED,
+# INCOMPLETE) makes the card FAIL. OUTDIR must not exist yet; run roots, logs, verdicts.tsv and
+# summary.txt go there.
+#
+# Environment:
+#   HEARTH_BIN                    the hearth command (default: hearth on PATH)
+#   HOL_WORKBENCH_RUNTIME_CONFIG  Hearth's runtime config, if your install needs it
+#   HEARTH_TIMEOUT                per-run budget in seconds (default 900)
+set -u
+cd "$(dirname "$0")/.." || exit 2
+OUT=${1:?usage: bin/run-cards OUTDIR [CARD...]}
+shift
+case $OUT in /*) ;; *) OUT=$PWD/$OUT ;; esac
+[ -e "$OUT" ] && { echo "run-cards: $OUT exists; give a new directory" >&2; exit 2; }
+mkdir -p "$OUT/logs" "$OUT/runs" || exit 2
+HEARTH=${HEARTH_BIN:-hearth}
+TIMEOUT=${HEARTH_TIMEOUT:-900}
+ONLY=" $* "
+printf 'card\tkind\tfile\tprofile\tverdict\trun_root\n' > "$OUT/verdicts.tsv"
+: > "$OUT/summary.txt"
+status=0
+
+# run1 CARD KIND DIR FILE PROFILE -> echoes the verdict line
+run1() {
+  local card=$1 kind=$2 dir=$3 file=$4 profile=$5
+  local root="$OUT/runs/$card/${file%.ml}" log="$OUT/logs/$card.${file%.ml}"
+  "$HEARTH" prove "$PWD/$dir/$file" --run-root "$root" --profile "$profile" --timeout "$TIMEOUT" \
+    > "$log.out" 2> "$log.err"
+  local v
+  v=$(grep -m1 -E '^(PASSED|FAILED|INCOMPLETE|REFUSED|UNCHANGED) ' "$log.out")
+  [ -n "$v" ] || v="NO-VERDICT (see $log.out)"
+  printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$card" "$kind" "$file" "$profile" "$v" "$root" >> "$OUT/verdicts.tsv"
+  printf '%s' "$v"
+}
+
+while IFS=$'\t' read -r card dir profile leaves controls headline; do
+  case $card in '#'*|'') continue ;; esac
+  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
+  ok=1 detail=""
+  IFS=, read -r -a L <<< "$leaves"
+  IFS=, read -r -a C <<< "$controls"
+  for f in "${L[@]}"; do
+    v=$(run1 "$card" leaf "$dir" "$f" "$profile")
+    case $v in PASSED*) n=$(sed -E 's/.*: ([0-9]+\/[0-9]+) bindings.*/\1/' <<< "$v"); detail+=" $f $n;" ;;
+      *) ok=0; detail+=" $f NOT PASSED: ${v:0:120};" ;; esac
+  done
+  for f in "${C[@]}"; do
+    v=$(run1 "$card" control "$dir" "$f" "$profile")
+    case $v in FAILED*) at=$(sed -E 's/^FAILED [^ ]+ at ([A-Za-z0-9_]+).*/\1/' <<< "$v"); detail+=" control $f FAILED at $at (as designed);" ;;
+      *) ok=0; detail+=" control $f NOT FAILED: ${v:0:120};" ;; esac
+  done
+  if [ $ok = 1 ]; then word=PASS; else word=FAIL; status=1; fi
+  line=$(printf 'CARD %-9s %-5s %s  %s:%s' "$card" "$profile" "$word" "$headline" "${detail%;}")
+  echo "$line" | tee -a "$OUT/summary.txt"
+done < cards.tsv
+exit $status
