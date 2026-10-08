@@ -15,11 +15,36 @@
 
 ## Exact statement
 
-The kernel-checked conclusion of each headline binding, exactly as `hearth inspect --binding` printed the matched source statement (HOL Light syntax: `&n` is the real n, `!` is ∀, `/\` is ∧, `inv` is 1/x). Full inspect output: `evidence/`.
+The complete statement below is copied from the quotation passed to `prove` in [moser_certificate.ml](moser_certificate.ml). The saved [inspect output](evidence/inspect-MOSER_PLACEMENT_CERTIFICATE.txt) reports that the kernel conclusion matched with empty hypotheses, but its displayed statement is truncated; the proof source supplies the complete text here. HOL Light syntax: `&n` is the real n, `!` is ∀, `/\` is ∧, and `inv` is 1/x.
 
 `MOSER_PLACEMENT_CERTIFICATE`:
 ```
-three_label_region (moser_xi (&0) (&0)) (moser_ups (&0) (&0)) /\ three_label_region (moser_xi (sqrt(&3) / &2) (&1 / &2)) (moser_ups (sqrt(&3) / &2) (&1 / &2)) /\ three_label_region (moser_xi (sqrt(&3) / &2) (--(&1 / &2))) (moser_ups (sqrt(&3) / &2) (--(&1 / &2))) /\ three_label_region (moser_xi (sqrt(&3)) (&0)) (moser_ups (sqrt(&3)) (&0)) /\ three_label_region (moser_xi ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12)) (moser_ups ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12)) /\ three_label_region (moser_xi ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12)) (moser_ups ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12)) /\ three_label_region (moser_xi (&5 * sqrt(&3) / &6) (sqrt(&33) / &6)) (moser_ups (&5 * sqrt(&3) / &6) (sqrt(&33) / &6)) /\ ~(?c:real#real->num. (!p. c p < 3) /\ (!x1 y1 x2 y2. MEM (x1,y1) [(moser_xi (&0) (&0), moser_ups (&0) (&0)); (moser_xi (sqrt(&3) / &2) (&1 / &2), moser_ups (sqrt(&3) / &2) (&1 / &2)); (moser_xi (sqrt(&3) / &2) (--(&1 / &2)), moser_ups (sqrt(&3) / &2) (--(&1 / &2))); (moser_xi (sqrt(&3)) (&0), moser_ups (sqrt(&3)) (&0)); (moser_xi ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12), moser_ups ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12)); (moser_xi ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12), moser_ups ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12)); (moser_xi (&5 * sqrt(&3) / &6) (sqrt(&33) / &6), moser_ups (&5 * sqrt(&3) / &6) (sqrt(&33) / &6))] /\ MEM (x2,y2) [(moser_xi (&0) (&0), moser_ups (&0) (&0)); (moser_xi (sqrt(&3) / &2) (&...
+three_label_region (moser_xi (&0) (&0)) (moser_ups (&0) (&0)) /\
+      three_label_region (moser_xi (sqrt(&3) / &2) (&1 / &2)) (moser_ups (sqrt(&3) / &2) (&1 / &2)) /\
+      three_label_region (moser_xi (sqrt(&3) / &2) (--(&1 / &2))) (moser_ups (sqrt(&3) / &2) (--(&1 / &2))) /\
+      three_label_region (moser_xi (sqrt(&3)) (&0)) (moser_ups (sqrt(&3)) (&0)) /\
+      three_label_region (moser_xi ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12)) (moser_ups ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12)) /\
+      three_label_region (moser_xi ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12)) (moser_ups ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12)) /\
+      three_label_region (moser_xi (&5 * sqrt(&3) / &6) (sqrt(&33) / &6)) (moser_ups (&5 * sqrt(&3) / &6) (sqrt(&33) / &6)) /\
+   ~(?c:real#real->num.
+       (!p. c p < 3) /\
+       (!x1 y1 x2 y2.
+          MEM (x1,y1) [(moser_xi (&0) (&0), moser_ups (&0) (&0));
+      (moser_xi (sqrt(&3) / &2) (&1 / &2), moser_ups (sqrt(&3) / &2) (&1 / &2));
+      (moser_xi (sqrt(&3) / &2) (--(&1 / &2)), moser_ups (sqrt(&3) / &2) (--(&1 / &2)));
+      (moser_xi (sqrt(&3)) (&0), moser_ups (sqrt(&3)) (&0));
+      (moser_xi ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12), moser_ups ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12));
+      (moser_xi ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12), moser_ups ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12));
+      (moser_xi (&5 * sqrt(&3) / &6) (sqrt(&33) / &6), moser_ups (&5 * sqrt(&3) / &6) (sqrt(&33) / &6))] /\
+          MEM (x2,y2) [(moser_xi (&0) (&0), moser_ups (&0) (&0));
+      (moser_xi (sqrt(&3) / &2) (&1 / &2), moser_ups (sqrt(&3) / &2) (&1 / &2));
+      (moser_xi (sqrt(&3) / &2) (--(&1 / &2)), moser_ups (sqrt(&3) / &2) (--(&1 / &2)));
+      (moser_xi (sqrt(&3)) (&0), moser_ups (sqrt(&3)) (&0));
+      (moser_xi ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12), moser_ups ((&5 * sqrt(&3) - sqrt(&11)) / &12) ((sqrt(&33) + &5) / &12));
+      (moser_xi ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12), moser_ups ((&5 * sqrt(&3) + sqrt(&11)) / &12) ((sqrt(&33) - &5) / &12));
+      (moser_xi (&5 * sqrt(&3) / &6) (sqrt(&33) / &6), moser_ups (&5 * sqrt(&3) / &6) (sqrt(&33) / &6))] /\
+          (x1 - x2) pow 2 + (y1 - y2) pow 2 = &1
+          ==> ~(c(x1,y1) = c(x2,y2))))
 ```
 
 ## What HOL certifies
@@ -58,15 +83,8 @@ about 14.7k lines, with no `sorry` found by grep, and the comparator permits onl
 `Classical.choice`. This card is an independent method for a Lean-covered step (the slate's words), not new
 coverage.
 
-Definition hole: the release's `ComparatorChallenges/EuclideanFiveColor.json` lists
-`OAI.EuclideanFiveColor.ProperColoring` under `definition_names`, so the release's own comparator check compares
-only that definition's name, type, universes and safety, not its body. The lead compared the two bodies by
-reading: the solution's `ProperColoring k c := ∀ x y : ℂ, ‖x - y‖ = 1 → c x ≠ c y` matches the challenge's up to
-the names of bound variables. The lane's Lean re-check has since confirmed this by machine (SLATE.md rule 8,
-`b26-lean/RESULTS.md`; not re-run for this repository): on bluestar26, comparator run through Hearth's Lean lane
-**without** `definition_names`, which makes comparator require `ProperColoring`'s body to be identical to the
-challenge's, PASSED with `1/1 theorems matched` and only the standard axioms (Lean 4.34.1, Mathlib d13f23b,
-comparator 46f1cef), and its Fin-6 negative control was REFUSED.
+The release's EuclideanFiveColor configuration lists `ProperColoring` as a definition hole. In the separate Lean lane's strict re-check, that list was omitted and the reachable body of `ProperColoring` matched. The theorem passed with only the permitted standard axioms, while the deliberate Fin-6 statement control was refused. The run used Lean 4.34.1 and comparator 46f1cef on the release at adc7f124; it is separate from this HOL card's replay. See the [dated comparator note](../../docs/comparator-recheck.md) for the wider sample and its limits.
+
 
 ## Verdicts
 

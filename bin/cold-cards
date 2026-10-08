@@ -1,72 +1,156 @@
 #!/usr/bin/env bash
 # cold-cards WARMDIR OUTDIR [CARD...]
-#
-# The publish gate. Replays every warm receipt of a finished warm run in Hearth's cold checker: HOL Light built
-# from pinned sources inside a Docker image, with no Hearth runtime, CRIU or warm state (`dev/cold-check` in a
-# hol-hearth checkout; see its docker/cold-checker/README.md). Leaves must reproduce; negative controls run with
-# --expect-failed and must fail cold at the same binding as warm. Prints one cold verdict line per card.
-#
-# WARMDIR is the directory bin/run-cards worked in (it holds cards.tsv, cards/ and out/), copied to this machine.
-# OUTDIR must not exist yet. Runs on Linux.
-#
-# Environment:
-#   HEARTH_CHECKOUT  hol-hearth checkout whose dev/cold-check to use (default ~/src/hol-hearth)
-#   COLD_IMAGE       cold-checker image built from that checkout (default hol-hearth-cold-checker)
-#   COLD_DOCKER      container command (default docker; 'mac docker' on an OrbStack Linux machine)
-#   COLD_STREAM      1 to send contexts as a tar stream (default 1; needed for 'mac docker')
-#   COLD_TIMEOUT     replay budget per receipt in seconds (default 5400; heavy loads Multivariate cold)
-#   COLD_JOBS        parallel cold checks (default 2). A heavy cold check holds about 3 GB; three at once on a
-#                    12 GB OrbStack VM got one of them OOM-killed (HOL exited 137), which reports "not reproduced".
+# Replays exactly the selected warm receipts through Hearth's cold checker.
+# Requires Bash, Python 3, xargs, and a hol-hearth checkout with dev/cold-check.
+# OUTDIR must be new. Settings retain their original meanings:
+# HEARTH_CHECKOUT (~/src/hol-hearth), COLD_IMAGE (hol-hearth-cold-checker),
+# COLD_DOCKER (docker), COLD_STREAM (1), COLD_TIMEOUT (5400), COLD_JOBS (2).
+# Leaves must reproduce; controls use --expect-failed to match the warm binding.
+# A PASS requires every expected receipt exactly once, all checker exits zero,
+# and successful worker orchestration. Empty or damaged output cannot pass.
 set -u
-if [ "${1:-}" = --one ]; then   # internal: one cold check. args: card kind file dir
+
+if [ "${1:-}" = --one ]; then
+  [ "$#" = 5 ] || exit 2
   shift; card=$1 kind=$2 file=$3 dir=$4
-  base=${file%.ml}; ctx="$OUTDIR/ctx/$card/$base"; mkdir -p "$OUTDIR/ctx/$card"
+  base=${file%.ml}; ctx="$OUTDIR/ctx/$card/$base"
+  mkdir -p "$OUTDIR/ctx/$card" || exit 2
   extra=(); [ "$kind" = control ] && extra=(--expect-failed)
   [ "${COLD_STREAM:-1}" = 1 ] && extra+=(--stream)
-  start=$(date +%s)
+  start=$(date +%s) || exit 2
   (cd "$HEARTH_CHECKOUT" && dev/cold-check "$WARMDIR/out/runs/$card/$base" --project-root "$WARMDIR/$dir" \
-     --context "$ctx" --image "${COLD_IMAGE:-hol-hearth-cold-checker}" --docker "${COLD_DOCKER:-docker}" \
-     --timeout "${COLD_TIMEOUT:-5400}" "${extra[@]}") > "$OUTDIR/logs/$card.$base.log" 2>&1
+    --context "$ctx" --image "${COLD_IMAGE:-hol-hearth-cold-checker}" --docker "${COLD_DOCKER:-docker}" \
+    --timeout "${COLD_TIMEOUT:-5400}" "${extra[@]}") > "$OUTDIR/logs/$card.$base.log" 2>&1
   rc=$?
-  line=$(grep -v 'still running' "$OUTDIR/logs/$card.$base.log" | grep -m1 -E '^(COLD CHECK|cold-check: refused)')
-  why=$(grep -m1 '^reason:' "$OUTDIR/logs/$card.$base.log")
-  [ $rc = 0 ] || line="$line ${why}"
-  printf '%s\t%s\t%s\t%s\t%ss\t%s\n' "$card" "$kind" "$file" "$rc" "$(( $(date +%s) - start ))" "${line:-see log}" \
-    >> "$OUTDIR/cold.tsv"
-  exit 0
+  line=$(awk '!/still running/ && /^(COLD CHECK|cold-check: refused)/ { print; exit }' "$OUTDIR/logs/$card.$base.log")
+  why=$(awk '/^reason:/ { print; exit }' "$OUTDIR/logs/$card.$base.log")
+  [ "$rc" = 0 ] || line="$line $why"
+  line=${line//$'\t'/ }; line=${line//$'\r'/ }
+  elapsed=$(( $(date +%s) - start ))
+  record="$OUTDIR/records/$card.$kind.$file.tsv"
+  printf '%s\t%s\t%s\t%s\t%ss\t%s\n' "$card" "$kind" "$file" "$rc" "$elapsed" "${line:-see log}" \
+    > "$record.tmp.$$" || exit 2
+  mv "$record.tmp.$$" "$record" || exit 2
+  exit "$rc"
 fi
 
-WARMDIR=${1:?usage: bin/cold-cards WARMDIR OUTDIR [CARD...]}; OUTDIR=${2:?usage: bin/cold-cards WARMDIR OUTDIR [CARD...]}
-shift 2
-WARMDIR=$(cd "$WARMDIR" && pwd) || exit 2
+[ "$#" -ge 2 ] || { echo 'usage: bin/cold-cards WARMDIR OUTDIR [CARD...]' >&2; exit 2; }
+case ${COLD_JOBS:-2} in ''|*[!0-9]*) echo 'cold-cards: COLD_JOBS must be a positive integer' >&2; exit 2 ;; esac
+python3 -c 'import sys; n=int(sys.argv[1]); sys.exit(0 if 1 <= n <= 2147483647 else 2)' "${COLD_JOBS:-2}" || {
+  echo 'cold-cards: COLD_JOBS must be between 1 and 2147483647' >&2; exit 2;
+}
+WARMDIR=$(cd "$1" && pwd) || exit 2
+OUTDIR=$2; shift 2
 case $OUTDIR in /*) ;; *) OUTDIR=$PWD/$OUTDIR ;; esac
 [ -e "$OUTDIR" ] && { echo "cold-cards: $OUTDIR exists; give a new directory" >&2; exit 2; }
-mkdir -p "$OUTDIR/logs" || exit 2
+mkdir -p "$OUTDIR/logs" "$OUTDIR/records" || exit 2
 HEARTH_CHECKOUT=${HEARTH_CHECKOUT:-$HOME/src/hol-hearth}
 export WARMDIR OUTDIR HEARTH_CHECKOUT
-ONLY=" $* "
-printf 'card\tkind\tfile\texit\twall\tfirst_line\n' > "$OUTDIR/cold.tsv"
-jobs_file="$OUTDIR/jobs.txt"; : > "$jobs_file"
-while IFS=$'\t' read -r card dir profile leaves controls headline; do
-  case $card in '#'*|'') continue ;; esac
-  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
-  for f in ${leaves//,/ }; do echo "$card leaf $f $dir" >> "$jobs_file"; done
-  for f in ${controls//,/ }; do echo "$card control $f $dir" >> "$jobs_file"; done
-done < "$WARMDIR/cards.tsv"
-# heavy receipts first, so the long ones start early
-{ grep -E '^(017|188|369|150|354-pi) ' "$jobs_file"; grep -v -E '^(017|188|369|150|354-pi) ' "$jobs_file"; } |
-  xargs -P "${COLD_JOBS:-2}" -L 1 "$0" --one
 
-status=0
-: > "$OUTDIR/summary.txt"
-while IFS=$'\t' read -r card dir profile leaves controls headline; do
-  case $card in '#'*|'') continue ;; esac
-  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
-  rows=$(awk -F'\t' -v c="$card" '$1 == c' "$OUTDIR/cold.tsv")
-  n=$(printf '%s\n' "$rows" | grep -c .)
-  bad=$(printf '%s\n' "$rows" | awk -F'\t' '$4 != 0' | grep -c .)
-  if [ "$bad" = 0 ]; then word=PASS; else word=FAIL; status=1; fi
-  echo "COLD $card $profile $word: $((n - bad))/$n receipts reproduced cold (leaves reproduced, controls failed at the warm binding)" |
-    tee -a "$OUTDIR/summary.txt"
-done < "$WARMDIR/cards.tsv"
-exit $status
+# Freeze the expected receipt set before launching anything. NUL-delimited jobs
+# avoid xargs interpreting quotes, spaces, or backslashes in arguments.
+python3 - "$WARMDIR/cards.tsv" "$OUTDIR" "$@" <<'PY' || exit 2
+import csv, json, pathlib, re, sys
+manifest, out = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
+requested = sys.argv[3:]
+try:
+    if len(set(requested)) != len(requested):
+        raise ValueError('duplicate requested card')
+    cards, seen = [], set()
+    for row in csv.reader(manifest.open(), delimiter='\t'):
+        if not row or not row[0] or row[0].startswith('#'):
+            continue
+        if len(row) != 6:
+            raise ValueError('cards.tsv must have six columns')
+        card, directory, profile, leaves, controls, headline = row
+        if not re.fullmatch(r'[A-Za-z0-9_-]+', card) or card in seen:
+            raise ValueError('invalid or duplicate card: ' + card)
+        seen.add(card)
+        if profile not in ('light', 'heavy'):
+            raise ValueError('unknown profile: ' + profile)
+        path = pathlib.PurePosixPath(directory)
+        if not directory or path.is_absolute() or '..' in path.parts or '\x00' in directory:
+            raise ValueError('invalid card directory')
+        jobs, files = [], set()
+        for kind, names in [('leaf', leaves), ('control', controls)]:
+            for name in names.split(','):
+                if not re.fullmatch(r'[A-Za-z0-9_-]+\.ml', name) or name in files:
+                    raise ValueError('invalid or duplicate receipt file: ' + name)
+                files.add(name)
+                jobs.append([card, kind, name, directory])
+        if not requested or card in requested:
+            cards.append({'card': card, 'profile': profile, 'jobs': jobs})
+    if set(requested) - seen:
+        raise ValueError('unknown requested cards: ' + ', '.join(sorted(set(requested) - seen)))
+    if not cards:
+        raise ValueError('no selected cards or receipts')
+    (out / 'expected.json').write_text(json.dumps(cards, indent=2) + '\n')
+    jobs = [job for c in sorted(cards, key=lambda c: c['profile'] != 'heavy') for job in c['jobs']]
+    (out / 'jobs.txt').write_text(''.join('\t'.join(job) + '\n' for job in jobs))
+    (out / 'jobs.nul').write_bytes(b''.join(arg.encode() + b'\0' for job in jobs for arg in job))
+except (OSError, ValueError) as exc:
+    print('cold-cards: ' + str(exc), file=sys.stderr)
+    sys.exit(2)
+PY
+
+xargs -0 -r -P "${COLD_JOBS:-2}" -n 4 bash "$0" --one < "$OUTDIR/jobs.nul"
+worker_status=$?
+printf '%s\n' "$worker_status" > "$OUTDIR/worker-exit.txt" || exit 2
+
+# Aggregate only after workers finish. Receipt identities, multiplicity, shape,
+# and worker status are checked independently of the number of successful rows.
+python3 - "$OUTDIR" "$worker_status" <<'PY'
+import collections, csv, json, pathlib, re, sys
+out, worker_status = pathlib.Path(sys.argv[1]), int(sys.argv[2])
+try:
+    cards = json.loads((out / 'expected.json').read_text())
+    expected = [tuple(job[:3]) for card in cards for job in card['jobs']]
+    if not expected or len(set(expected)) != len(expected):
+        raise ValueError('empty or duplicate expected receipt set')
+    rows, errors = [], []
+    for path in sorted((out / 'records').iterdir()):
+        if not path.is_file() or path.suffix != '.tsv':
+            errors.append('unexpected or unfinished record: ' + path.name)
+            continue
+        with path.open(newline='') as stream:
+            data = list(csv.reader(stream, delimiter='\t'))
+        if len(data) != 1:
+            errors.append('record must contain exactly one row: ' + path.name)
+            continue
+        row = data[0]
+        if len(row) != 6 or not re.fullmatch(r'\d+', row[3]) or not re.fullmatch(r'\d+s', row[4]):
+            errors.append('malformed record: ' + path.name)
+            continue
+        if path.name != f'{row[0]}.{row[1]}.{row[2]}.tsv':
+            errors.append('record filename and identity disagree: ' + path.name)
+        rows.append(row)
+    counts = collections.Counter(tuple(row[:3]) for row in rows)
+    for key in expected:
+        if counts[key] != 1:
+            errors.append(f'expected exactly one {key}, found {counts[key]}')
+    for key in counts.keys() - set(expected):
+        errors.append('unexpected receipt: ' + repr(key))
+    if worker_status:
+        errors.append('worker orchestration exited ' + str(worker_status))
+    with (out / 'cold.tsv').open('w', newline='') as stream:
+        writer = csv.writer(stream, delimiter='\t', lineterminator='\n')
+        writer.writerow(['card', 'kind', 'file', 'exit', 'wall', 'first_line'])
+        writer.writerows(rows)
+    lines, failed = [], bool(errors)
+    for card in cards:
+        keys = [tuple(job[:3]) for job in card['jobs']]
+        good = sum(counts[key] == 1 and any(tuple(row[:3]) == key and int(row[3]) == 0 for row in rows) for key in keys)
+        passed = not errors and good == len(keys)
+        failed |= not passed
+        lines.append(f"COLD {card['card']} {card['profile']} {'PASS' if passed else 'FAIL'}: {good}/{len(keys)} receipts reproduced cold (leaves reproduced, controls failed at the warm binding)")
+    (out / 'summary.txt').write_text('\n'.join(lines) + '\n')
+    (out / 'validation-errors.txt').write_text(''.join(error + '\n' for error in errors))
+    for line in lines:
+        print(line)
+    for error in errors:
+        print('cold-cards: ' + error, file=sys.stderr)
+    sys.exit(1 if failed else 0)
+except (OSError, ValueError, KeyError, TypeError) as exc:
+    print('cold-cards: aggregation failed: ' + str(exc), file=sys.stderr)
+    sys.exit(2)
+PY

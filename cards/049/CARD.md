@@ -5,12 +5,12 @@
 | | |
 |---|---|
 | Family | 049, "A stable-coordinate counterexample in four variables." (release `CONTENTS.md`) |
-| Release paper | `preprints/A-stable-coordinate-that-is-not-a-coordinate-in-four-variables-October-5-2026/stable-coordinate-four-variables.pdf`, *A stable coordinate that is not a coordinate in four variables* |
+| Release paper | **October 5, 2026:** [*A stable coordinate that is not a coordinate in four variables*](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-stable-coordinate-that-is-not-a-coordinate-in-four-variables-October-5-2026/stable-coordinate-four-variables.pdf) |
 | Where | `build/source/sections/02-construction.tex`, Props 2.1–2.2. The lead checked that f and Q match the paper's Thm 1.1. |
 | Profile | `light` |
 | Leaves | `stable_coordinate_049.ml`, `stable_coordinate_049_assembled.ml` |
 | Negative control | `negctl_stable_coordinate_049_wrong_f.ml` |
-| Release Lean | `lean/docs/049.md` (a different paper of the family) and `lean/docs/047.md` |
+| Release Lean | [Family 049 scope](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/docs/049.md) covers the September 24 companion; [family 047 scope](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/docs/047.md) excludes the separate stable-coordinate consequences. |
 | Release | github.com/openai/math at commit `adc7f124` (2026-10-06) |
 
 ## Exact statement
@@ -37,17 +37,28 @@ the linear coordinates); `stable_coordinate_049_assembled.ml` (30 bindings) is t
 
 - The standard step from "mutually inverse polynomial maps with rational coefficients on ℝ⁵" to a ℚ-algebra,
   hence ℂ-algebra, automorphism of ℂ[x₁..x₄, w]. This is one line of algebra but is not formalized.
-- The hard half: that f is **not** a coordinate of ℂ[x₁..x₄]. That is the derivation and filtration
-  obstruction in §§3–5; the paper claims it, and it is paper-only.
+- The October 5 paper's claim that **this particular f is not a coordinate** of ℂ[x₁..x₄]. This card does not
+  formalize its derivation and filtration obstruction in §§3–5. The selected Lean scopes cited below do not
+  cover that stable-coordinate result; this does not imply that all noncoordinate results in family 049 are
+  unformalized.
 
 ## Relation to the release's Lean coverage
 
 "Lean" below means the release's selected statement, as described in its `lean/docs/NNN.md`; this repository does not rebuild or re-run that Lean.
 
-`lean/docs/049.md` covers only the family's **September 24** paper, a **different** polynomial F
-(ℂ[x]/(F) ≅ ℂ^[n−1], F not a coordinate, n ≥ 4). `lean/docs/047.md` says: "The separate stable-coordinate ...
-consequences are not included." So the October 5 theorem is paper-only in the release, and this card checks
-its construction half (the slate: "this theorem was paper-only").
+The release **does have Lean coverage for family 049**. Its [scope document](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/docs/049.md) links the
+**September 24** paper, *An explicit noncoordinate polynomial with affine three-space zero fibre*.
+The selected [Abhyankar–Sathaye statement](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/ComparatorChallenges/AbhyankarSathaye.lean)
+says that for every n ≥ 4 there exists a noncoordinate polynomial F whose quotient is an affine-space
+polynomial ring. The scope document also lists a companion result about commuting locally nilpotent
+derivations. Do not describe those selected results, or the entire family, as paper-only.
+
+This HOL card concerns the **October 5** stable-coordinate paper and its displayed polynomial f, not the
+September 24 companion's F. The selected statements above do not state the explicit inverse maps checked
+here. The release's [family 047 scope](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/docs/047.md) also explicitly excludes the separate
+stable-coordinate consequences. Thus any "beyond the release's Lean" label for this card refers specifically
+to the October 5 construction. HOL certifies the displayed polynomial identities on ℝ⁵; it does not establish
+the paper's complete stable-coordinate counterexample or the noncoordinate obstruction for this f.
 
 ## Verdicts
 

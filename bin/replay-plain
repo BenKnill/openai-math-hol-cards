@@ -1,51 +1,206 @@
-#!/usr/bin/env bash
-# replay-plain OUTDIR [CARD...]
-#
-# Reproduces the cards with a plain HOL Light and no Hearth: for each leaf and negative control it starts a
-# fresh HOL Light (hol.sh), loads the profile recipe from replay/<profile>.ml (byte-identical to Hearth's
-# recipe; sha256 in the README), then the file, and prints each headline theorem. A leaf passes when its output
-# has no "Exception" or "Error" line and every binding it defines is a theorem; a control passes when it raises.
-# This is a convenience check and weaker than Hearth's (no per-binding statement matching or receipts).
-#
-# Environment:
-#   HOLDIR       HOL Light checkout at commit 2a1cea8f1cb7f3885a60d947ba06eabac6ec1d32, built with `make`
-#   PLAIN_JOBS   parallel replays (default 2). A heavy replay loads Multivariate cold: about 25 minutes and 3 GB each.
-set -u
-cd "$(dirname "$0")/.." || exit 2
-if [ "${1:-}" = --one ]; then   # internal: card kind file dir profile
-  shift; card=$1 kind=$2 file=$3 dir=$4 profile=$5
-  log="$OUT/logs/$card.${file%.ml}.log"
-  names=$(grep -oE '^let +[A-Za-z0-9_]+ *=' "$dir/$file" | sed -E 's/^let +([A-Za-z0-9_]+).*/\1/')
-  { echo "loadt \"$PWD/replay/$profile.ml\";;"
-    echo "loadt \"$PWD/$dir/$file\";;"
-    for n in $names; do echo "$n;;"; done; } > "$log.in"
-  (cd "$HOLDIR" && LINE_EDITOR=env ./hol.sh < "$log.in") > "$log" 2>&1
-  if grep -qE '^(Exception|Error)|Exception:|Error:' "$log"; then got=raised; else got=clean; fi
-  case $kind/$got in leaf/clean|control/raised) ok=ok ;; *) ok=BAD ;; esac
-  printf '%s\t%s\t%s\t%s\t%s\n' "$card" "$kind" "$file" "$got" "$ok" >> "$OUT/plain.tsv"
-  exit 0
-fi
-OUT=${1:?usage: bin/replay-plain OUTDIR [CARD...]}; shift
-: "${HOLDIR:?set HOLDIR to a built HOL Light checkout at 2a1cea8}"
-case $OUT in /*) ;; *) OUT=$PWD/$OUT ;; esac
-[ -e "$OUT" ] && { echo "replay-plain: $OUT exists; give a new directory" >&2; exit 2; }
-mkdir -p "$OUT/logs" || exit 2
-export OUT HOLDIR
-ONLY=" $* "
-: > "$OUT/plain.tsv"
-while IFS=$'\t' read -r card dir profile leaves controls headline; do
-  case $card in '#'*|'') continue ;; esac
-  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
-  for f in ${leaves//,/ }; do echo "$card leaf $f $dir $profile"; done
-  for f in ${controls//,/ }; do echo "$card control $f $dir $profile"; done
-done < cards.tsv | xargs -P "${PLAIN_JOBS:-2}" -L 1 "$PWD/bin/replay-plain" --one
-status=0
-while IFS=$'\t' read -r card dir profile rest; do
-  case $card in '#'*|'') continue ;; esac
-  [ "$ONLY" = "  " ] || case $ONLY in *" $card "*) ;; *) continue ;; esac
-  bad=$(awk -F'\t' -v c="$card" '$1 == c && $5 != "ok"' "$OUT/plain.tsv" | grep -c .)
-  n=$(awk -F'\t' -v c="$card" '$1 == c' "$OUT/plain.tsv" | grep -c .)
-  if [ "$bad" = 0 ]; then w=PASS; else w=FAIL; status=1; fi
-  echo "PLAIN $card $profile $w: $((n - bad))/$n files behaved as expected (leaves clean, controls raised)"
-done < cards.tsv | tee "$OUT/summary.txt"
-exit $status
+#!/usr/bin/env python3
+"""replay-plain OUTDIR [CARD ...] -- convenience replay, using Python 3 stdlib.
+
+HOLDIR points to a built HOL Light checkout at 2a1cea8f1cb7f3885a60d947ba06eabac6ec1d32.
+PLAIN_JOBS is the positive number of parallel HOL processes (default 2).
+
+Every file gets a fresh hol.sh process. A leaf must finish with status zero,
+load its profile and source without errors, and type-check each top-level
+`let NAME = prove ...` or `new_definition ...` binding as thm. A control must
+finish with status zero and raise Failure while loading its source, after a
+clean profile load. Source/profile completion markers are required.
+
+This does not match theorem statements, audit axioms, create Hearth receipts,
+or require a control to fail at a particular binding. Use the saved cold
+receipts for those stronger checks. Historical plain.tsv files were produced
+by an older, weaker script; this script does not retroactively validate them.
+"""
+
+import concurrent.futures
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+import uuid
+
+
+ERROR = re.compile(
+    r"Exception:|\bError:|Error in included file|Fatal error|Stack overflow|"
+    r"Segmentation fault|Syntax error|Parse error|Unbound value"
+)
+HARD_ERROR = re.compile(
+    r"\bError:|Fatal error|Stack overflow|Segmentation fault|"
+    r"Syntax error|Parse error|Unbound value"
+)
+BINDING = re.compile(
+    r"^let\s+([A-Za-z_][A-Za-z0-9_']*)\s*=\s*(?:prove|new_definition)\b",
+    re.MULTILINE,
+)
+
+
+def fail(message):
+    print("replay-plain: " + message, file=sys.stderr)
+    raise SystemExit(2)
+
+
+def ocaml_string(value):
+    # Paths are strings, never executable OCaml expressions.
+    return json.dumps(str(value), ensure_ascii=False)
+
+
+def run_one(job, repo, hol, out):
+    card, kind, filename, directory, profile = job
+    stem = card + "." + filename[:-3]
+    logpath = out / "logs" / (stem + ".log")
+    source = repo / directory / filename
+    token = "PLAIN_" + uuid.uuid4().hex
+    result = dict(card=card, kind=kind, file=filename, profile=profile,
+                  got="bad", ok="BAD", reason="not run", exit=None, bindings=[])
+
+    def marker(name):
+        return token + ":" + name
+
+    def emit(name):
+        # A leading newline makes markers whole lines even with a HOL prompt.
+        return "print_endline " + ocaml_string("\n" + marker(name)) + ";;"
+
+    try:
+        names = BINDING.findall(source.read_text()) if kind == "leaf" else []
+        if kind == "leaf" and (not names or len(set(names)) != len(names)):
+            raise ValueError("leaf has no recognizable theorem bindings or repeats a binding")
+        script = [emit("profile_start"),
+                  "loadt " + ocaml_string(repo / "replay" / (profile + ".ml")) + ";;",
+                  emit("profile_end"), emit("source_start"),
+                  "loadt " + ocaml_string(source) + ";;", emit("source_end")]
+        for name in names:
+            script.append("let () = ignore (" + name + " : thm); " + emit("binding:" + name))
+        script.append(emit("done"))
+        input_text = "\n".join(script) + "\n"
+        logpath.with_suffix(".log.in").write_text(input_text)
+        with logpath.open("w") as output:
+            process = subprocess.run(
+                [str(hol / "hol.sh")], cwd=hol, input=input_text, text=True,
+                stdout=output, stderr=subprocess.STDOUT,
+                env={**os.environ, "LINE_EDITOR": "env"}, check=False,
+            )
+        result["exit"] = process.returncode
+        if process.returncode != 0:
+            raise ValueError("HOL process exited " + str(process.returncode))
+        text = logpath.read_text(errors="replace")
+        lines = text.splitlines()
+        stages = ["profile_start", "profile_end", "source_start", "source_end"]
+        stages += ["binding:" + name for name in names] + ["done"]
+        indexes = []
+        for stage in stages:
+            positions = [i for i, line in enumerate(lines) if line == marker(stage)]
+            if len(positions) != 1:
+                raise ValueError("missing or repeated completion marker: " + stage)
+            indexes.append(positions[0])
+        if indexes != sorted(indexes):
+            raise ValueError("completion markers are out of order")
+        if kind == "leaf":
+            if ERROR.search(text):
+                raise ValueError("HOL reported an error while checking a leaf")
+            result.update(got="clean", ok="ok", reason="source loaded and theorem types checked",
+                          bindings=names)
+        else:
+            start = indexes[2]
+            end = indexes[3]
+            source_output = "\n".join(lines[start + 1:end])
+            other_output = "\n".join(lines[:start] + lines[end + 1:])
+            if ERROR.search(other_output):
+                raise ValueError("control had a profile/startup/harness error")
+            if HARD_ERROR.search(source_output):
+                raise ValueError("control had a syntax/type/runtime error, not a proof Failure")
+            if not re.search(r"Exception:\s*Failure\b", source_output):
+                raise ValueError("control did not raise Failure during source load")
+            result.update(got="raised", ok="ok", reason="control raised Failure during source load")
+    except (OSError, ValueError) as error:
+        result["reason"] = str(error)
+    return result
+
+
+def main():
+    if len(sys.argv) < 2:
+        fail("usage: bin/replay-plain OUTDIR [CARD ...]")
+    repo = Path(__file__).resolve().parent.parent
+    holdir = os.environ.get("HOLDIR")
+    if not holdir:
+        fail("set HOLDIR to a built HOL Light checkout at 2a1cea8")
+    hol = Path(holdir).expanduser().resolve()
+    if not (hol / "hol.sh").is_file() or not os.access(hol / "hol.sh", os.X_OK):
+        fail("HOLDIR/hol.sh must exist and be executable")
+    parallel = os.environ.get("PLAIN_JOBS", "2")
+    if not re.fullmatch(r"[1-9][0-9]*", parallel):
+        fail("PLAIN_JOBS must be a positive integer")
+    requested = set(sys.argv[2:])
+    cards = []
+    seen = set()
+    jobs = []
+    try:
+        for line in (repo / "cards.tsv").read_text().splitlines():
+            if not line or line.startswith("#"):
+                continue
+            fields = line.split("\t")
+            if len(fields) != 6:
+                fail("cards.tsv must have six fields per row")
+            card, directory, profile, leaves, controls, headline = fields
+            if card in seen or not re.fullmatch(r"[0-9]{3}(?:-[a-z]+)?", card):
+                fail("duplicate or invalid card: " + card)
+            seen.add(card)
+            if requested and card not in requested:
+                continue
+            if profile not in ("light", "heavy") or not re.fullmatch(r"cards/[0-9]{3}", directory):
+                fail("invalid profile or directory for " + card)
+            cards.append((card, profile))
+            for kind, files in (("leaf", leaves), ("control", controls)):
+                for filename in files.split(","):
+                    if not re.fullmatch(r"[A-Za-z0-9_]+\.ml", filename):
+                        fail("invalid source name for " + card)
+                    if not (repo / directory / filename).is_file():
+                        fail("missing source: " + directory + "/" + filename)
+                    jobs.append((card, kind, filename, directory, profile))
+        if requested - seen:
+            fail("unknown card(s): " + ", ".join(sorted(requested - seen)))
+        if not jobs or len(jobs) != len(set(jobs)):
+            fail("empty or duplicate replay jobs")
+        output = Path(sys.argv[1]).expanduser()
+        out = (output if output.is_absolute() else repo / output).resolve()
+        out.mkdir(parents=True, exist_ok=False)
+        (out / "logs").mkdir()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=min(int(parallel), len(jobs))) as pool:
+            results = list(pool.map(lambda job: run_one(job, repo, hol, out), jobs))
+        if len(results) != len(jobs):
+            raise RuntimeError("not every scheduled replay produced a result")
+        (out / "plain.tsv").write_text("".join(
+            "\t".join(str(result[key]) for key in ("card", "kind", "file", "got", "ok")) + "\n"
+            for result in results
+        ))
+        (out / "details.json").write_text(json.dumps(results, indent=2) + "\n")
+        status = 0
+        summaries = []
+        for card, profile in cards:
+            actual = [result for result in results if result["card"] == card]
+            expected = [job for job in jobs if job[0] == card]
+            count_ok = len(actual) == len(expected) and len(actual) > 0
+            good = sum(result["ok"] == "ok" for result in actual)
+            passed = count_ok and good == len(expected)
+            if not passed:
+                status = 1
+            summaries.append("PLAIN {} {} {}: {}/{} files behaved as expected".format(
+                card, profile, "PASS" if passed else "FAIL", good, len(expected)))
+        (out / "summary.txt").write_text("\n".join(summaries) + "\n")
+        print("\n".join(summaries))
+        for result in results:
+            if result["ok"] != "ok":
+                print("replay-plain: {} {}: {}".format(
+                    result["card"], result["file"], result["reason"]), file=sys.stderr)
+        return status
+    except (OSError, RuntimeError, ValueError) as error:
+        fail(str(error))
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
