@@ -1,0 +1,12 @@
+COLD 158 light PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 049 light PASS: 3/3 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 353 light PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 354-light light PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 354-pi heavy PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 196 light PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 028 light PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 325 light PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 017 heavy PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 188 heavy PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)
+COLD 369 heavy PASS: 6/6 receipts (leaves reproduced cold, controls failed at the warm binding); 1 earlier attempt killed for memory, retried
+COLD 150 heavy PASS: 2/2 receipts (leaves reproduced cold, controls failed at the warm binding)

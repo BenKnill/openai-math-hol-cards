@@ -1,0 +1,255 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_J0_STEP",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_J1_STEP",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_STEP",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_COMBINE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "RATIO_SUMMABLE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "RATIO_BOUND",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_J0_SUMMABLE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_J1_SUMMABLE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_SUMS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_MONO",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_MAGNITUDE_POS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_SIGNS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_PARTIAL_BOUNDS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_POS_AT_18411",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_NEG_AT_18412",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_DEN_GE_2",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_ABS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_TERM_BOUND",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_MAJORANT_SUMMABLE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "REAL_CONTINUOUS_ON_UNIFORM_LIMIT_SEQ",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_TERM_CONTINUOUS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_UNIFORM",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_CONTINUOUS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_DJ1_ROOT",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_J1_TERM_DERIV",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "BESSEL_J1_DERIVATIVE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "HOTSPOT369_J1_CRITICAL_POINT",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 0,
+  "headline": "COLD CHECK: reproduced hotspots369_bessel_deriv.ml: 0 new axioms; 27 bindings re-run (27 matched their quotations, 0 type-checked only); no spec lock",
+  "mode": "reproduce",
+  "outcome": "reproduced",
+  "reasons": [],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}

@@ -1,0 +1,17 @@
+049	leaf	stable_coordinate_049_assembled.ml	clean	ok
+049	leaf	stable_coordinate_049.ml	clean	ok
+158	leaf	moser_certificate.ml	clean	ok
+158	control	negctl_moser_certificate_shift280.ml	raised	ok
+353	leaf	affine_box_353.ml	clean	ok
+049	control	negctl_stable_coordinate_049_wrong_f.ml	raised	ok
+353	control	negctl_affine_box_353_corner_shifted.ml	raised	ok
+354-light	leaf	torus354_light.ml	clean	ok
+354-light	control	negctl_torus354_light_4pi_over_80.ml	raised	ok
+196	leaf	kaplansky196_bounds.ml	clean	ok
+196	control	negctl_kaplansky196_below_99_100.ml	raised	ok
+028	leaf	moat028_translation.ml	clean	ok
+028	control	negctl_moat028_empty_set_allowed.ml	raised	ok
+325	leaf	crouzeix325_two_xy.ml	clean	ok
+325	control	negctl_crouzeix325_half.ml	raised	ok
+017	leaf	pi355_017.ml	clean	ok
+017	control	negctl_pi355_017_gt25.ml	raised	ok

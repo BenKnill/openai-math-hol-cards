@@ -1,6 +1,6 @@
 # Card 150: Triangle billiards: the corner count (counting step only)
 
-**Publish gate:** `150`: warm **PASS**, cold **PENDING**. **Not cleared: do not advertise this card** until the gate passes.
+**Publish gate:** `150`: warm **PASS**, cold **PASS**. Cleared: every leaf reproduced cold and every control failed cold at its warm binding.
 
 | | |
 |---|---|
@@ -53,8 +53,10 @@ Warm: Hearth on bluestar26 (hol-hearth 02443c8, HOL Light 2a1cea8), run `bluesta
 
 | Card | Kind | File | Warm verdict (exact first line) | Cold verdict |
 |---|---|---|---|---|
-| 150 | leaf | `billiards150_corner.ml` | `PASSED billiards150_corner.ml: 5/5 bindings proved, 0 new axioms, eval 1.9s (heavy)` | pending |
-| 150 | control | `negctl_billiards150_at_most_3.ml` | `FAILED negctl_billiards150_at_most_3.ml at NEGCTL_T150_ONE_RADIAN_AT_MOST_3 (line 96): Exception: Failure "ARITH_RULE 'CARD s < 5 ==> CARD s <= 3': REAL_ARITH '~(&0 <= real_of_int _4092265 /\\\n real_…` | pending |
+| 150 | leaf | `billiards150_corner.ml` | `PASSED billiards150_corner.ml: 5/5 bindings proved, 0 new axioms, eval 1.9s (heavy)` | reproduced (2915s) |
+| 150 | control | `negctl_billiards150_at_most_3.ml` | `FAILED negctl_billiards150_at_most_3.ml at NEGCTL_T150_ONE_RADIAN_AT_MOST_3 (line 96): Exception: Failure "ARITH_RULE 'CARD s < 5 ==> CARD s <= 3': REAL_ARITH '~(&0 <= real_of_int _4092265 /\\\n real_…` | failed at the warm binding, as designed (1596s) |
+
+Cold: Hearth's cold checker (`dev/cold-check`, hol-hearth 32862cd, which is 02443c8 plus one unrelated commit (68d79ad, Btrfs device support), run on the OrbStack Linux machine dev, image `hol-hearth-cold-checker:cards-32862cd`): HOL Light 2a1cea8 built from pinned sources in Docker with `--network none`, no Hearth runtime, CRIU or warm state. Leaves must reproduce; controls run with `--expect-failed` and must fail cold at the binding that failed warm. Run `dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78 (heavy, three at a time), -light (light, one at a time) and -phase2 (the 150 receipts, the 369 retry and one 369 control, two at a time)`.
 
 The original lane receipts (before this repository) are listed in the lane's `RESULTS.md` / `RECEIPTS.md` named under Sources.
 

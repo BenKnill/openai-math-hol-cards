@@ -1,0 +1,84 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "PI355_GAP",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "PI_BETWEEN_3_AND_4",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SIN_355_EQ",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SIN_SMALL_LOWER",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SIN_355_BOUNDS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "FLINT_HILLS_355_TERM",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "FLINT_HILLS_PARTIAL_355",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "PI355_CERTIFICATE",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 0,
+  "headline": "COLD CHECK: reproduced pi355_017.ml: 0 new axioms; 8 bindings re-run (8 matched their quotations, 0 type-checked only); no spec lock",
+  "mode": "reproduce",
+  "outcome": "reproduced",
+  "reasons": [],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}

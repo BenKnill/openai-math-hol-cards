@@ -1,6 +1,6 @@
 # Card 158: The seven-point Moser certificate
 
-**Publish gate:** `158`: warm **PASS**, cold **PENDING**. **Not cleared: do not advertise this card** until the gate passes.
+**Publish gate:** `158`: warm **PASS**, cold **PASS**. Cleared: every leaf reproduced cold and every control failed cold at its warm binding.
 
 | | |
 |---|---|
@@ -76,8 +76,10 @@ Warm: Hearth on bluestar26 (hol-hearth 02443c8, HOL Light 2a1cea8), run `bluesta
 
 | Card | Kind | File | Warm verdict (exact first line) | Cold verdict |
 |---|---|---|---|---|
-| 158 | leaf | `moser_certificate.ml` | `PASSED moser_certificate.ml: 26/26 bindings proved, 0 new axioms, eval 114.0s (light)` | pending |
-| 158 | control | `negctl_moser_certificate_shift280.ml` | `FAILED negctl_moser_certificate_shift280.ml at MOSER_REGION_UT (line 152): Exception: Failure "REAL_ARITH 's pow 2 = &3\n==> t pow 2 = &11\n==> &1732050807568 / &1000000000000 < s\n==> s < &1732050807…` | pending |
+| 158 | leaf | `moser_certificate.ml` | `PASSED moser_certificate.ml: 26/26 bindings proved, 0 new axioms, eval 114.0s (light)` | reproduced (397s) |
+| 158 | control | `negctl_moser_certificate_shift280.ml` | `FAILED negctl_moser_certificate_shift280.ml at MOSER_REGION_UT (line 152): Exception: Failure "REAL_ARITH 's pow 2 = &3\n==> t pow 2 = &11\n==> &1732050807568 / &1000000000000 < s\n==> s < &1732050807…` | failed at the warm binding, as designed (418s) |
+
+Cold: Hearth's cold checker (`dev/cold-check`, hol-hearth 32862cd, which is 02443c8 plus one unrelated commit (68d79ad, Btrfs device support), run on the OrbStack Linux machine dev, image `hol-hearth-cold-checker:cards-32862cd`): HOL Light 2a1cea8 built from pinned sources in Docker with `--network none`, no Hearth runtime, CRIU or warm state. Leaves must reproduce; controls run with `--expect-failed` and must fail cold at the binding that failed warm. Run `dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78 (heavy, three at a time), -light (light, one at a time) and -phase2 (the 150 receipts, the 369 retry and one 369 control, two at a time)`.
 
 The original lane receipts (before this repository) are listed in the lane's `RESULTS.md` / `RECEIPTS.md` named under Sources.
 

@@ -7,8 +7,8 @@ own Lean coverage. They were made as on-screen "what is certified, and what is n
 
 **Private draft for Ben's review. Nothing here is published.** License: **TBD by Ben** (see the end).
 
-**Status (2026-10-07 21:21 UTC):** 12/12 cards PASS warm (every leaf PASSED, every control FAILED as designed;
-fresh replays on bluestar26); the cold gate is still running. A card that fails cold is marked in its `CARD.md` and must not be
+**Status (2026-10-08 01:03 UTC):** 12/12 cards PASS warm (every leaf PASSED, every control FAILED as designed;
+fresh replays on bluestar26); 12/12 cards cleared the cold gate. A card that fails cold is marked in its `CARD.md` and must not be
 advertised.
 
 None of these cards proves a headline theorem of the release. Each checks one step, one number, or one piece of
@@ -18,18 +18,18 @@ algebra, and each `CARD.md` says what is left out. Read a card before quoting it
 
 | Card | Family | What HOL certifies | Beyond the release's Lean | Profile | Warm | Cold |
 |---|---|---|---|---|---|---|
-| [158](cards/158/CARD.md) | 158 · The Euclidean plane cannot be colored with five colors | The seven placed Moser vertices lie in the three-label region, the 11 edges have length exactly 1, and no proper 3-labelling exists; exact arithmetic in ℚ(√3,√11) | Independent method for a Lean-covered step | `light` | PASS (26/26) | pending |
-| [049](cards/049/CARD.md) | 049 · A stable-coordinate counterexample in four variables | Two explicit polynomial maps on ℝ⁵ are mutually inverse and send the paper's f to the first coordinate | Checks the construction half of a result that is paper-only in the release; the hard half (f is not a coordinate in 4 variables) stays paper-only | `light` | PASS (8/8; 30/30) | pending |
-| [353](cards/353/CARD.md) | 353 · Affine Bernstein rigidity through dimension nine and a smooth dimension-ten counterexample | The algebra of the invariant box: stationary corner (9/2, 7/2, 33/7), face signs, the D-equation from the C-equation | Checks algebra inside a result that is paper-only in the release (Lean covers dimensions 3–9 only); the ODE and PDE reduction are not covered | `light` | PASS (4/4) | pending |
-| [354-light](cards/354/CARD.md) | 354 · The isoperimetric profile of the cubic three-torus | Switch volumes 4·PI/81 and 1/PI and the radii there, for any positive constant PI | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (4/4) | pending |
-| [354-pi](cards/354/CARD.md) | 354 · The isoperimetric profile of the cubic three-torus | The same with HOL's real π: ties at 4π/81 (radii 1/3, 2/9) and at 1/π (area 2); the ball loses at 1/π | Cross-check; minimality is Lean's | `heavy` | PASS (10/10) | pending |
-| [196](cards/196/CARD.md) | 196 · A counterexample to Kaplansky’s zero-divisor conjecture | The paper's two exact rationals and both bounds < 149/150 | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (1/1) | pending |
-| [028](cards/028/CARD.md) | 028 · Uniformly bounded components of Gaussian-prime graphs | A finite nonempty set in the plane is not invariant under a nonzero translation | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (1/1) | pending |
-| [325](cards/325/CARD.md) | 325 · The complete Crouzeix conjecture | x² + y² = 1 ⇒ \|2xy\| ≤ 1 (real form of the sharpness case) | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (1/1) | pending |
-| [017](cards/017/CARD.md) | 017 · The irrationality exponent of π is 2 | 2.664·10⁻⁷ < 355/113 − π < 2.669·10⁻⁷ and 24.5 < 1/(355³ sin² 355) < 24.7, so the Flint–Hills partial sum through n = 355 exceeds 24 | Hook card; Flint–Hills convergence stays paper-only | `heavy` | PASS (8/8) | pending |
-| [188](cards/188/CARD.md) | 188 · The sharp terminal leave in random triangle removal | q = (1+2Dt)^(−1/2) solves q′ = −Dq³ with q(0) = 1, and the leave constant tends to 1/(2√2) | The heuristic's arithmetic only; nothing about the random process | `heavy` | PASS (7/7) | pending |
-| [369](cards/369/CARD.md) | 369 · The hot spots conjecture for simply connected planar domains | The J₁ power series has derivative J₀ − J₁/x on (1, 2), and it vanishes somewhere in (1.8411, 1.8412) | Illustration; not that this is the first zero, nor that the series are "the" Bessel functions | `heavy` | PASS (16/16; 24/24; 27/27) | pending |
-| [150](cards/150/CARD.md) | 150 · Weak mixing of triangular billiards with an irrational angle | Counting step only: at most ⌈π/α⌉ multiples of α fit in an open interval of length π | Not the bounce claim; the unfolding geometry is not certified | `heavy` | PASS (5/5) | pending |
+| [158](cards/158/CARD.md) | 158 · The Euclidean plane cannot be colored with five colors | The seven placed Moser vertices lie in the three-label region, the 11 edges have length exactly 1, and no proper 3-labelling exists; exact arithmetic in ℚ(√3,√11) | Independent method for a Lean-covered step | `light` | PASS (26/26) | PASS |
+| [049](cards/049/CARD.md) | 049 · A stable-coordinate counterexample in four variables | Two explicit polynomial maps on ℝ⁵ are mutually inverse and send the paper's f to the first coordinate | Checks the construction half of a result that is paper-only in the release; the hard half (f is not a coordinate in 4 variables) stays paper-only | `light` | PASS (8/8; 30/30) | PASS |
+| [353](cards/353/CARD.md) | 353 · Affine Bernstein rigidity through dimension nine and a smooth dimension-ten counterexample | The algebra of the invariant box: stationary corner (9/2, 7/2, 33/7), face signs, the D-equation from the C-equation | Checks algebra inside a result that is paper-only in the release (Lean covers dimensions 3–9 only); the ODE and PDE reduction are not covered | `light` | PASS (4/4) | PASS |
+| [354-light](cards/354/CARD.md) | 354 · The isoperimetric profile of the cubic three-torus | Switch volumes 4·PI/81 and 1/PI and the radii there, for any positive constant PI | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (4/4) | PASS |
+| [354-pi](cards/354/CARD.md) | 354 · The isoperimetric profile of the cubic three-torus | The same with HOL's real π: ties at 4π/81 (radii 1/3, 2/9) and at 1/π (area 2); the ball loses at 1/π | Cross-check; minimality is Lean's | `heavy` | PASS (10/10) | PASS |
+| [196](cards/196/CARD.md) | 196 · A counterexample to Kaplansky’s zero-divisor conjecture | The paper's two exact rationals and both bounds < 149/150 | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (1/1) | PASS |
+| [028](cards/028/CARD.md) | 028 · Uniformly bounded components of Gaussian-prime graphs | A finite nonempty set in the plane is not invariant under a nonzero translation | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (1/1) | PASS |
+| [325](cards/325/CARD.md) | 325 · The complete Crouzeix conjecture | x² + y² = 1 ⇒ \|2xy\| ≤ 1 (real form of the sharpness case) | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (1/1) | PASS |
+| [017](cards/017/CARD.md) | 017 · The irrationality exponent of π is 2 | 2.664·10⁻⁷ < 355/113 − π < 2.669·10⁻⁷ and 24.5 < 1/(355³ sin² 355) < 24.7, so the Flint–Hills partial sum through n = 355 exceeds 24 | Hook card; Flint–Hills convergence stays paper-only | `heavy` | PASS (8/8) | PASS |
+| [188](cards/188/CARD.md) | 188 · The sharp terminal leave in random triangle removal | q = (1+2Dt)^(−1/2) solves q′ = −Dq³ with q(0) = 1, and the leave constant tends to 1/(2√2) | The heuristic's arithmetic only; nothing about the random process | `heavy` | PASS (7/7) | PASS |
+| [369](cards/369/CARD.md) | 369 · The hot spots conjecture for simply connected planar domains | The J₁ power series has derivative J₀ − J₁/x on (1, 2), and it vanishes somewhere in (1.8411, 1.8412) | Illustration; not that this is the first zero, nor that the series are "the" Bessel functions | `heavy` | PASS (16/16; 24/24; 27/27) | PASS |
+| [150](cards/150/CARD.md) | 150 · Weak mixing of triangular billiards with an irrational angle | Counting step only: at most ⌈π/α⌉ multiples of α fit in an open interval of length π | Not the bounce claim; the unfolding geometry is not certified | `heavy` | PASS (5/5) | PASS |
 
 Warm = Hearth (`hearth prove --force`) on bluestar26: hol-hearth 02443c8, HOL Light 2a1cea8; bindings proved per leaf in
 parentheses. Cold = Hearth's cold checker (`dev/cold-check`): HOL Light rebuilt from pinned sources in Docker with no
@@ -77,7 +77,7 @@ Everything else is copied byte for byte from the lane; `PROVENANCE.tsv` lists ev
    - **Hearth revision:** the shared hearth 02443c8 had moved its Lean lane to a separate repo, so the lane ran from a clean clone at cd1a660, the revision dev used.
    - **Remaining families:** still running; see `b26-lean/RESULTS.md`. It is now fair to say in the 158 film that "we re-ran the Lean check".
 
-*Copied verbatim from the lane's `SLATE.md` (sha256 `b7d9d4b15b9308af…`, read 2026-10-07 21:21 UTC). Paths in the rules
+*Copied verbatim from the lane's `SLATE.md` (sha256 `b7d9d4b15b9308af…`, read 2026-10-08 01:03 UTC). Paths in the rules
 (`lean-158/`, `b26-lean/`, `lean/docs/`) refer to the lane directory and to the release. For these cards: "the paper
 claims" applies to every paper-only statement a card mentions, and none of the cards may be described as a "first".*
 
@@ -133,8 +133,13 @@ HEARTH_CHECKOUT=~/src/hol-hearth bin/cold-cards WARMDIR out/cold-1
 ```
 
 What was run here: the bluestar26 warm run `bluestar26:~/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78` was copied to the OrbStack Linux machine
-`dev` and checked with `HEARTH_CHECKOUT=~/src/hol-hearth-rc COLD_IMAGE=hol-hearth-cold-checker:cards-32862cd COLD_DOCKER='mac docker' COLD_STREAM=1 COLD_JOBS=3 bin/cold-cards WARMDIR OUTDIR`. A `light` receipt takes about 3 minutes cold and a `heavy` one
-about 25 minutes (Multivariate is loaded from scratch).
+`dev` and checked there through the Mac's Docker with
+`HEARTH_CHECKOUT=~/src/hol-hearth-rc COLD_IMAGE=hol-hearth-cold-checker:cards-32862cd COLD_DOCKER='mac docker' COLD_STREAM=1 COLD_JOBS=3 bin/cold-cards WARMDIR OUTDIR`. A `light` receipt took 3 to 7 minutes cold and a `heavy` one 25 to 75 minutes
+(Multivariate is loaded from scratch; the 369 receipts are the slowest). One heavy check, 369's
+`hotspots369_bessel.ml`, was killed for memory (HOL exited 137) while three heavy checks shared the 12 GB VM; it
+reproduced on a second attempt, and the remaining receipts ran with at most two heavy checks at a time (now the
+default). Every attempt is listed in `evidence/cold/cold.tsv`, and each receipt's `cold-verdict.json` is in
+`evidence/cold/verdicts/`.
 
 ### Plain HOL Light (no Hearth)
 
@@ -154,7 +159,7 @@ K196_RATIONAL_BOUNDS;;
 ```
 
 `replay-plain` is weaker than Hearth: it checks that a leaf loads without an exception and that its bindings are
-theorems, and that a control raises; it does not match statements or record receipts. 
+theorems, and that a control raises; it does not match statements or record receipts. Tested: the seven light cards and card 017 (heavy) passed with bin/replay-plain on bluestar26 (HOL Light 2a1cea8 as built by Hearth's setup; run ~/lanes/math-hol-cards/plain/20261007T211422Z). The heavy replay took about 110 minutes there; the other heavy cards were not run this way.
 
 ## Layout
 

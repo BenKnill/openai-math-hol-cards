@@ -1,6 +1,6 @@
 # Card 369: Hot spots on the disk: the zero of J₁′ (three leaves)
 
-**Publish gate:** `369`: warm **PASS**, cold **PENDING**. **Not cleared: do not advertise this card** until the gate passes.
+**Publish gate:** `369`: warm **PASS**, cold **PASS**. Cleared: every leaf reproduced cold and every control failed cold at its warm binding.
 
 | | |
 |---|---|
@@ -70,12 +70,14 @@ Warm: Hearth on bluestar26 (hol-hearth 02443c8, HOL Light 2a1cea8), run `bluesta
 
 | Card | Kind | File | Warm verdict (exact first line) | Cold verdict |
 |---|---|---|---|---|
-| 369 | leaf | `hotspots369_bessel.ml` | `PASSED hotspots369_bessel.ml: 16/16 bindings proved, 0 new axioms, eval 6.4s (heavy)` | pending |
-| 369 | leaf | `hotspots369_bessel_root.ml` | `PASSED hotspots369_bessel_root.ml: 24/24 bindings proved, 0 new axioms, eval 8.6s (heavy)` | pending |
-| 369 | leaf | `hotspots369_bessel_deriv.ml` | `PASSED hotspots369_bessel_deriv.ml: 27/27 bindings proved, 0 new axioms, eval 7.6s (heavy)` | pending |
-| 369 | control | `negctl_hotspots369_pos_at_18412.ml` | `FAILED negctl_hotspots369_pos_at_18412.ml at NEGCTL_BESSEL_DJ1_POS_AT_18412 (line 255): Exception: Failure "TAC_PROOF: Unsolved goals".` | pending |
-| 369 | control | `negctl_hotspots369_root_shifted.ml` | `FAILED negctl_hotspots369_root_shifted.ml at NEGCTL_BESSEL_DJ1_ROOT_SHIFTED (line 388): Exception: Failure "MATCH_MP_TAC: No match".` | pending |
-| 369 | control | `negctl_hotspots369_deriv_is_j0.ml` | `FAILED negctl_hotspots369_deriv_is_j0.ml at NEGCTL_BESSEL_J1_TERM_DERIV_IS_J0 (line 347): Exception: Failure "REAL_ARITH '&1 *\n((x * inv (&2)) * &0 * inv (&1) * inv (&1) +\n (&1 * inv (&2)) * &1 * in…` | pending |
+| 369 | leaf | `hotspots369_bessel.ml` | `PASSED hotspots369_bessel.ml: 16/16 bindings proved, 0 new axioms, eval 6.4s (heavy)` | reproduced (2918s); earlier attempt 1: exit 1 (HOL exited 137: killed for memory, with three heavy cold checks sharing a 12 GB VM; not a proof failure) |
+| 369 | leaf | `hotspots369_bessel_root.ml` | `PASSED hotspots369_bessel_root.ml: 24/24 bindings proved, 0 new axioms, eval 8.6s (heavy)` | reproduced (3823s) |
+| 369 | leaf | `hotspots369_bessel_deriv.ml` | `PASSED hotspots369_bessel_deriv.ml: 27/27 bindings proved, 0 new axioms, eval 7.6s (heavy)` | reproduced (3969s) |
+| 369 | control | `negctl_hotspots369_pos_at_18412.ml` | `FAILED negctl_hotspots369_pos_at_18412.ml at NEGCTL_BESSEL_DJ1_POS_AT_18412 (line 255): Exception: Failure "TAC_PROOF: Unsolved goals".` | failed at the warm binding, as designed (4537s) |
+| 369 | control | `negctl_hotspots369_root_shifted.ml` | `FAILED negctl_hotspots369_root_shifted.ml at NEGCTL_BESSEL_DJ1_ROOT_SHIFTED (line 388): Exception: Failure "MATCH_MP_TAC: No match".` | failed at the warm binding, as designed (4187s) |
+| 369 | control | `negctl_hotspots369_deriv_is_j0.ml` | `FAILED negctl_hotspots369_deriv_is_j0.ml at NEGCTL_BESSEL_J1_TERM_DERIV_IS_J0 (line 347): Exception: Failure "REAL_ARITH '&1 *\n((x * inv (&2)) * &0 * inv (&1) * inv (&1) +\n (&1 * inv (&2)) * &1 * in…` | failed at the warm binding, as designed (1634s) |
+
+Cold: Hearth's cold checker (`dev/cold-check`, hol-hearth 32862cd, which is 02443c8 plus one unrelated commit (68d79ad, Btrfs device support), run on the OrbStack Linux machine dev, image `hol-hearth-cold-checker:cards-32862cd`): HOL Light 2a1cea8 built from pinned sources in Docker with `--network none`, no Hearth runtime, CRIU or warm state. Leaves must reproduce; controls run with `--expect-failed` and must fail cold at the binding that failed warm. Run `dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78 (heavy, three at a time), -light (light, one at a time) and -phase2 (the 150 receipts, the 369 retry and one 369 control, two at a time)`.
 
 The original lane receipts (before this repository) are listed in the lane's `RESULTS.md` / `RECEIPTS.md` named under Sources.
 

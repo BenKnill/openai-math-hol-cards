@@ -1,0 +1,84 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SC049_DET_PRESERVED",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SC049_H_LINEAR",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SC049_P_FORMULA",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SC049_MATRIX_INVERSE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SC049_QUADRIC_IDENTITY",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SC049_FLOW_FIXES_X_AND_SHIFTS_H",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SC049_FLOW_INVERSE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SC049_LINEAR_COORDINATES",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 0,
+  "headline": "COLD CHECK: reproduced stable_coordinate_049.ml: 0 new axioms; 8 bindings re-run (8 matched their quotations, 0 type-checked only); no spec lock",
+  "mode": "reproduce",
+  "outcome": "reproduced",
+  "reasons": [],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}

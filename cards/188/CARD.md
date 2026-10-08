@@ -1,6 +1,6 @@
 # Card 188: Random triangle removal: Spencer's law
 
-**Publish gate:** `188`: warm **PASS**, cold **PENDING**. **Not cleared: do not advertise this card** until the gate passes.
+**Publish gate:** `188`: warm **PASS**, cold **PASS**. Cleared: every leaf reproduced cold and every control failed cold at its warm binding.
 
 | | |
 |---|---|
@@ -51,8 +51,10 @@ Warm: Hearth on bluestar26 (hol-hearth 02443c8, HOL Light 2a1cea8), run `bluesta
 
 | Card | Kind | File | Warm verdict (exact first line) | Cold verdict |
 |---|---|---|---|---|
-| 188 | leaf | `triangle188.ml` | `PASSED triangle188.ml: 7/7 bindings proved, 0 new axioms, eval 2.1s (heavy)` | pending |
-| 188 | control | `negctl_triangle188_one_partner.ml` | `FAILED negctl_triangle188_one_partner.ml at NEGCTL_TR188_ONE_PARTNER_LAW (line 28): Exception: Failure "REAL_ARITH '~(q * inv q = &1) \\/\n(~(&0 < q) \\/ &0 = q) \\/\n--((&0 + &2 * D * &1) * inv (&2) …` | pending |
+| 188 | leaf | `triangle188.ml` | `PASSED triangle188.ml: 7/7 bindings proved, 0 new axioms, eval 2.1s (heavy)` | reproduced (1480s) |
+| 188 | control | `negctl_triangle188_one_partner.ml` | `FAILED negctl_triangle188_one_partner.ml at NEGCTL_TR188_ONE_PARTNER_LAW (line 28): Exception: Failure "REAL_ARITH '~(q * inv q = &1) \\/\n(~(&0 < q) \\/ &0 = q) \\/\n--((&0 + &2 * D * &1) * inv (&2) …` | failed at the warm binding, as designed (1508s) |
+
+Cold: Hearth's cold checker (`dev/cold-check`, hol-hearth 32862cd, which is 02443c8 plus one unrelated commit (68d79ad, Btrfs device support), run on the OrbStack Linux machine dev, image `hol-hearth-cold-checker:cards-32862cd`): HOL Light 2a1cea8 built from pinned sources in Docker with `--network none`, no Hearth runtime, CRIU or warm state. Leaves must reproduce; controls run with `--expect-failed` and must fail cold at the binding that failed warm. Run `dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78 (heavy, three at a time), -light (light, one at a time) and -phase2 (the 150 receipts, the 369 retry and one 369 control, two at a time)`.
 
 The original lane receipts (before this repository) are listed in the lane's `RESULTS.md` / `RECEIPTS.md` named under Sources.
 

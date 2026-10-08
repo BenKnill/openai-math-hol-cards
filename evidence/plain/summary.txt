@@ -1,0 +1,8 @@
+PLAIN 158 light PASS: 2/2 files behaved as expected (leaves clean, controls raised)
+PLAIN 049 light PASS: 3/3 files behaved as expected (leaves clean, controls raised)
+PLAIN 353 light PASS: 2/2 files behaved as expected (leaves clean, controls raised)
+PLAIN 354-light light PASS: 2/2 files behaved as expected (leaves clean, controls raised)
+PLAIN 196 light PASS: 2/2 files behaved as expected (leaves clean, controls raised)
+PLAIN 028 light PASS: 2/2 files behaved as expected (leaves clean, controls raised)
+PLAIN 325 light PASS: 2/2 files behaved as expected (leaves clean, controls raised)
+PLAIN 017 heavy PASS: 2/2 files behaved as expected (leaves clean, controls raised)

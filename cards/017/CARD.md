@@ -1,6 +1,6 @@
 # Card 017: π: the n = 355 spike in the Flint–Hills series
 
-**Publish gate:** `017`: warm **PASS**, cold **PENDING**. **Not cleared: do not advertise this card** until the gate passes.
+**Publish gate:** `017`: warm **PASS**, cold **PASS**. Cleared: every leaf reproduced cold and every control failed cold at its warm binding.
 
 | | |
 |---|---|
@@ -56,8 +56,10 @@ Warm: Hearth on bluestar26 (hol-hearth 02443c8, HOL Light 2a1cea8), run `bluesta
 
 | Card | Kind | File | Warm verdict (exact first line) | Cold verdict |
 |---|---|---|---|---|
-| 017 | leaf | `pi355_017.ml` | `PASSED pi355_017.ml: 8/8 bindings proved, 0 new axioms, eval 2.1s (heavy)` | pending |
-| 017 | control | `negctl_pi355_017_gt25.ml` | `FAILED negctl_pi355_017_gt25.ml at NEGCTL_FLINT_HILLS_355_TERM_GT_25 (line 50): Exception: Failure "REAL_ARITH 's pow 2 < &22801 / &25000000000000 /\\\n&90601 / &100000000000000 < s pow 2 /\\\ns < -- …` | pending |
+| 017 | leaf | `pi355_017.ml` | `PASSED pi355_017.ml: 8/8 bindings proved, 0 new axioms, eval 2.1s (heavy)` | reproduced (1601s) |
+| 017 | control | `negctl_pi355_017_gt25.ml` | `FAILED negctl_pi355_017_gt25.ml at NEGCTL_FLINT_HILLS_355_TERM_GT_25 (line 50): Exception: Failure "REAL_ARITH 's pow 2 < &22801 / &25000000000000 /\\\n&90601 / &100000000000000 < s pow 2 /\\\ns < -- …` | failed at the warm binding, as designed (1485s) |
+
+Cold: Hearth's cold checker (`dev/cold-check`, hol-hearth 32862cd, which is 02443c8 plus one unrelated commit (68d79ad, Btrfs device support), run on the OrbStack Linux machine dev, image `hol-hearth-cold-checker:cards-32862cd`): HOL Light 2a1cea8 built from pinned sources in Docker with `--network none`, no Hearth runtime, CRIU or warm state. Leaves must reproduce; controls run with `--expect-failed` and must fail cold at the binding that failed warm. Run `dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78 (heavy, three at a time), -light (light, one at a time) and -phase2 (the 150 receipts, the 369 retry and one 369 control, two at a time)`.
 
 The original lane receipts (before this repository) are listed in the lane's `RESULTS.md` / `RECEIPTS.md` named under Sources.
 

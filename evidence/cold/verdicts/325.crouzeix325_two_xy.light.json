@@ -1,0 +1,21 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "C325_TWO_XY",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 0,
+  "headline": "COLD CHECK: reproduced crouzeix325_two_xy.ml: 0 new axioms; 1 bindings re-run (1 matched their quotations, 0 type-checked only); no spec lock",
+  "mode": "reproduce",
+  "outcome": "reproduced",
+  "reasons": [],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}

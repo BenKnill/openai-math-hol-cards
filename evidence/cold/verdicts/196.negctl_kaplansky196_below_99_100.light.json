@@ -1,0 +1,21 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "NEGCTL_K196_FIRST_BOUND_BELOW_99_100",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 0,
+  "headline": "COLD CHECK: negative control reproduced negctl_kaplansky196_below_99_100.ml: NEGCTL_K196_FIRST_BOUND_BELOW_99_100 failed cold, as it did warm; the 0 bindings before it re-ran (0 matched their quotations, 0 type-checked only); 0 new axioms, as recorded",
+  "mode": "expect_failed",
+  "outcome": "negative_control_reproduced",
+  "reasons": [],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}

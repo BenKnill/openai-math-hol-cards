@@ -1,0 +1,66 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "PI355_GAP",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "PI_BETWEEN_3_AND_4",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SIN_355_EQ",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SIN_SMALL_LOWER",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "SIN_355_BOUNDS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "NEGCTL_FLINT_HILLS_355_TERM_GT_25",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 0,
+  "headline": "COLD CHECK: negative control reproduced negctl_pi355_017_gt25.ml: NEGCTL_FLINT_HILLS_355_TERM_GT_25 failed cold, as it did warm; the 5 bindings before it re-ran (5 matched their quotations, 0 type-checked only); 0 new axioms, as recorded",
+  "mode": "expect_failed",
+  "outcome": "negative_control_reproduced",
+  "reasons": [],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}

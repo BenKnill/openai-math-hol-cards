@@ -1,0 +1,48 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "AB353_D_EQUATION",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "AB353_CORNER_STATIONARY",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "AB353_CROSS_PARTIALS_NONNEG",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "AB353_FACE_SIGNS",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 0,
+  "headline": "COLD CHECK: reproduced affine_box_353.ml: 0 new axioms; 4 bindings re-run (4 matched their quotations, 0 type-checked only); no spec lock",
+  "mode": "reproduce",
+  "outcome": "reproduced",
+  "reasons": [],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}

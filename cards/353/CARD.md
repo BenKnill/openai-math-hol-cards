@@ -1,6 +1,6 @@
 # Card 353: Dimension-ten affine maximal graph: the algebra of the invariant box
 
-**Publish gate:** `353`: warm **PASS**, cold **PENDING**. **Not cleared: do not advertise this card** until the gate passes.
+**Publish gate:** `353`: warm **PASS**, cold **PASS**. Cleared: every leaf reproduced cold and every control failed cold at its warm binding.
 
 | | |
 |---|---|
@@ -68,8 +68,10 @@ Warm: Hearth on bluestar26 (hol-hearth 02443c8, HOL Light 2a1cea8), run `bluesta
 
 | Card | Kind | File | Warm verdict (exact first line) | Cold verdict |
 |---|---|---|---|---|
-| 353 | leaf | `affine_box_353.ml` | `PASSED affine_box_353.ml: 4/4 bindings proved, 0 new axioms, eval 0.8s (light)` | pending |
-| 353 | control | `negctl_affine_box_353_corner_shifted.ml` | `FAILED negctl_affine_box_353_corner_shifted.ml at NEGCTL_AB353_CORNER_D_34_7 (line 8): Exception: Failure "TAC_PROOF: Unsolved goals".` | pending |
+| 353 | leaf | `affine_box_353.ml` | `PASSED affine_box_353.ml: 4/4 bindings proved, 0 new axioms, eval 0.8s (light)` | reproduced (213s) |
+| 353 | control | `negctl_affine_box_353_corner_shifted.ml` | `FAILED negctl_affine_box_353_corner_shifted.ml at NEGCTL_AB353_CORNER_D_34_7 (line 8): Exception: Failure "TAC_PROOF: Unsolved goals".` | failed at the warm binding, as designed (182s) |
+
+Cold: Hearth's cold checker (`dev/cold-check`, hol-hearth 32862cd, which is 02443c8 plus one unrelated commit (68d79ad, Btrfs device support), run on the OrbStack Linux machine dev, image `hol-hearth-cold-checker:cards-32862cd`): HOL Light 2a1cea8 built from pinned sources in Docker with `--network none`, no Hearth runtime, CRIU or warm state. Leaves must reproduce; controls run with `--expect-failed` and must fail cold at the binding that failed warm. Run `dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78 (heavy, three at a time), -light (light, one at a time) and -phase2 (the 150 receipts, the 369 retry and one 369 control, two at a time)`.
 
 The original lane receipts (before this repository) are listed in the lane's `RESULTS.md` / `RECEIPTS.md` named under Sources.
 

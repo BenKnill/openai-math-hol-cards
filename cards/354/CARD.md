@@ -1,6 +1,6 @@
 # Card 354: Isoperimetric switches in the cubic flat three-torus (two cards)
 
-**Publish gate:** `354-light`: warm **PASS**, cold **PENDING**; `354-pi`: warm **PASS**, cold **PENDING**. **Not cleared: do not advertise this card** until the gate passes.
+**Publish gate:** `354-light`: warm **PASS**, cold **PASS**; `354-pi`: warm **PASS**, cold **PASS**. Cleared: every leaf reproduced cold and every control failed cold at its warm binding.
 
 | | |
 |---|---|
@@ -87,10 +87,12 @@ Warm: Hearth on bluestar26 (hol-hearth 02443c8, HOL Light 2a1cea8), run `bluesta
 
 | Card | Kind | File | Warm verdict (exact first line) | Cold verdict |
 |---|---|---|---|---|
-| 354-light | leaf | `torus354_light.ml` | `PASSED torus354_light.ml: 4/4 bindings proved, 0 new axioms, eval 0.7s (light)` | pending |
-| 354-light | control | `negctl_torus354_light_4pi_over_80.ml` | `FAILED negctl_torus354_light_4pi_over_80.ml at NEGCTL_T354_BALL_TUBE_SWITCH_4PI_OVER_80 (line 15): Exception: Failure "REAL_ARITH '&0 < PI\n==> &0 < V\n==> &0 <= b\n==> &0 <= t\n==> b pow 3 = &36 * PI…` | pending |
-| 354-pi | leaf | `torus354_pi.ml` | `PASSED torus354_pi.ml: 10/10 bindings proved, 0 new axioms, eval 2.7s (heavy)` | pending |
-| 354-pi | control | `negctl_torus354_4pi_over_80.ml` | `FAILED negctl_torus354_4pi_over_80.ml at NEGCTL_T354_PI_SWITCH_AT_4PI_OVER_80 (line 85): Exception: Failure "REAL_ARITH '&0 < V\n==> &0 < r\n==> &0 < s\n==> &4 / &3 * pi * r pow 3 = V\n==> pi * s pow …` | pending |
+| 354-light | leaf | `torus354_light.ml` | `PASSED torus354_light.ml: 4/4 bindings proved, 0 new axioms, eval 0.7s (light)` | reproduced (146s) |
+| 354-light | control | `negctl_torus354_light_4pi_over_80.ml` | `FAILED negctl_torus354_light_4pi_over_80.ml at NEGCTL_T354_BALL_TUBE_SWITCH_4PI_OVER_80 (line 15): Exception: Failure "REAL_ARITH '&0 < PI\n==> &0 < V\n==> &0 <= b\n==> &0 <= t\n==> b pow 3 = &36 * PI…` | failed at the warm binding, as designed (153s) |
+| 354-pi | leaf | `torus354_pi.ml` | `PASSED torus354_pi.ml: 10/10 bindings proved, 0 new axioms, eval 2.7s (heavy)` | reproduced (1601s) |
+| 354-pi | control | `negctl_torus354_4pi_over_80.ml` | `FAILED negctl_torus354_4pi_over_80.ml at NEGCTL_T354_PI_SWITCH_AT_4PI_OVER_80 (line 85): Exception: Failure "REAL_ARITH '&0 < V\n==> &0 < r\n==> &0 < s\n==> &4 / &3 * pi * r pow 3 = V\n==> pi * s pow …` | failed at the warm binding, as designed (1601s) |
+
+Cold: Hearth's cold checker (`dev/cold-check`, hol-hearth 32862cd, which is 02443c8 plus one unrelated commit (68d79ad, Btrfs device support), run on the OrbStack Linux machine dev, image `hol-hearth-cold-checker:cards-32862cd`): HOL Light 2a1cea8 built from pinned sources in Docker with `--network none`, no Hearth runtime, CRIU or warm state. Leaves must reproduce; controls run with `--expect-failed` and must fail cold at the binding that failed warm. Run `dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78 (heavy, three at a time), -light (light, one at a time) and -phase2 (the 150 receipts, the 369 retry and one 369 control, two at a time)`.
 
 The original lane receipts (before this repository) are listed in the lane's `RESULTS.md` / `RECEIPTS.md` named under Sources.
 

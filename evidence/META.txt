@@ -1,7 +1,8 @@
 warm_dir=bluestar26:~/lanes/math-hol-cards/work/20261007T195855Z-a2c3f78
 warm_hearth=hol-hearth 02443c8, HOL Light 2a1cea8
-cold_hearth=32862cd (02443c8 plus one unrelated commit, 68d79ad, accepting a Btrfs superblock device), on the OrbStack Linux machine dev
-cold_image=hol-hearth-cold-checker:cards-32862cd (built from that checkout, OCaml 5.3.0, camlp5 8.03.01)
+cold_hearth=32862cd, which is 02443c8 plus one unrelated commit (68d79ad, Btrfs device support), run on the OrbStack Linux machine dev
+cold_image=hol-hearth-cold-checker:cards-32862cd
 cold_hol=2a1cea8
-cold_dir=dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78
+cold_dir=dev:~/lanes-runs/math-hol-cards/cold/20261007T200529Z-a2c3f78 (heavy, three at a time), -light (light, one at a time) and -phase2 (the 150 receipts, the 369 retry and one 369 control, two at a time)
 cold_cmd=HEARTH_CHECKOUT=~/src/hol-hearth-rc COLD_IMAGE=hol-hearth-cold-checker:cards-32862cd COLD_DOCKER='mac docker' COLD_STREAM=1 COLD_JOBS=3 bin/cold-cards WARMDIR OUTDIR
+plain_note=the seven light cards and card 017 (heavy) passed with bin/replay-plain on bluestar26 (HOL Light 2a1cea8 as built by Hearth's setup; run ~/lanes/math-hol-cards/plain/20261007T211422Z). The heavy replay took about 110 minutes there; the other heavy cards were not run this way.

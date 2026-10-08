@@ -1,0 +1,179 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_J0_STEP",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_J1_STEP",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_DJ1_STEP",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_COMBINE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "RATIO_SUMMABLE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "RATIO_BOUND",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_J0_SUMMABLE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_J1_SUMMABLE",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_DJ1_SUMS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_DJ1_MONO",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_DJ1_MAGNITUDE_POS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_DJ1_SIGNS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_DJ1_PARTIAL_BOUNDS",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_DJ1_POS_AT_18411",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "BESSEL_DJ1_NEG_AT_18412",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "HOTSPOT369_SIGN_CHANGE",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 1,
+  "headline": "COLD CHECK: NOT reproduced hotspots369_bessel.ml: HOL exited 137",
+  "mode": "reproduce",
+  "outcome": "not_reproduced",
+  "reasons": [
+    "HOL exited 137",
+    "the export script's source-loaded marker is missing",
+    "check marker BASE observed 0 times, expected once",
+    "check marker DELTA observed 0 times, expected once",
+    "check marker DONE observed 0 times, expected once",
+    "BESSEL_J0_STEP: not re-proved against its recorded statement",
+    "BESSEL_J1_STEP: not re-proved against its recorded statement",
+    "BESSEL_DJ1_STEP: not re-proved against its recorded statement",
+    "BESSEL_COMBINE: not re-proved against its recorded statement",
+    "RATIO_SUMMABLE: not re-proved against its recorded statement",
+    "RATIO_BOUND: not re-proved against its recorded statement",
+    "BESSEL_J0_SUMMABLE: not re-proved against its recorded statement",
+    "BESSEL_J1_SUMMABLE: not re-proved against its recorded statement",
+    "BESSEL_DJ1_SUMS: not re-proved against its recorded statement",
+    "BESSEL_DJ1_MONO: not re-proved against its recorded statement",
+    "BESSEL_DJ1_MAGNITUDE_POS: not re-proved against its recorded statement",
+    "BESSEL_DJ1_SIGNS: not re-proved against its recorded statement",
+    "BESSEL_DJ1_PARTIAL_BOUNDS: not re-proved against its recorded statement",
+    "BESSEL_DJ1_POS_AT_18411: not re-proved against its recorded statement",
+    "BESSEL_DJ1_NEG_AT_18412: not re-proved against its recorded statement",
+    "HOTSPOT369_SIGN_CHANGE: not re-proved against its recorded statement",
+    "hotspots369_bessel.ml: named by the receipt but not loaded by HOL"
+  ],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}

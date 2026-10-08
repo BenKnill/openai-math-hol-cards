@@ -1,0 +1,48 @@
+{
+  "benchmark_policy": null,
+  "bindings": [
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "MULTIPLES_IN_OPEN_INTERVAL",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "T150_CORNER_BOUNCE_COUNT",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "ok",
+      "category": "quotation",
+      "label": "matched its quotation, hypotheses empty",
+      "name": "PI_BOUNDS_150",
+      "spec_line": null,
+      "spec_status": null
+    },
+    {
+      "binding_probe": "quotation",
+      "binding_probe_result": "missing",
+      "category": "quotation",
+      "label": "not re-proved (no probe marker)",
+      "name": "NEGCTL_T150_ONE_RADIAN_AT_MOST_3",
+      "spec_line": null,
+      "spec_status": null
+    }
+  ],
+  "exit": 0,
+  "headline": "COLD CHECK: negative control reproduced negctl_billiards150_at_most_3.ml: NEGCTL_T150_ONE_RADIAN_AT_MOST_3 failed cold, as it did warm; the 3 bindings before it re-ran (3 matched their quotations, 0 type-checked only); 0 new axioms, as recorded",
+  "mode": "expect_failed",
+  "outcome": "negative_control_reproduced",
+  "reasons": [],
+  "schema": "hol-hearth.cold-check-verdict.v1",
+  "spec": null
+}
