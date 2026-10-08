@@ -38,11 +38,19 @@ the linear coordinates); `stable_coordinate_049_assembled.ml` (30 bindings) is t
 - The standard step from "mutually inverse polynomial maps with rational coefficients on ℝ⁵" to a ℚ-algebra,
   hence ℂ-algebra, automorphism of ℂ[x₁..x₄, w]. This is one line of algebra but is not formalized.
 - The October 5 paper's claim that **this particular f is not a coordinate** of ℂ[x₁..x₄]. This card does not
-  formalize its derivation and filtration obstruction in §§3–5. The selected Lean scopes cited below do not
-  cover that stable-coordinate result; this does not imply that all noncoordinate results in family 049 are
-  unformalized.
+  formalize its derivation and filtration obstruction in §§3–5. Upstream `fd4aeeb2` now includes a Lean
+  formalization and comparator target for the October 5 stable-coordinate result; that does not expand
+  what this HOL card proves.
 
-## Relation to the release's Lean coverage
+## Coverage update — 2026-10-08
+
+Upstream [`fd4aeeb2`](https://github.com/openai/math/tree/fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb) now includes the **October 5** stable-coordinate paper in [family 049's Lean scope](https://github.com/openai/math/blob/fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb/lean/docs/049.md), with [StableCoordinateFour](https://github.com/openai/math/blob/fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb/lean/ComparatorChallenges/StableCoordinateFour.lean) and its [configuration](https://github.com/openai/math/blob/fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb/lean/ComparatorChallenges/StableCoordinateFour.json). The target uses the same displayed polynomial and includes one-variable stable coordinateness, noncoordinateness in four variables, and the stated fiber properties. The [solution's Principal module](https://github.com/openai/math/blob/fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb/lean/OAI/AlgebraicGeometry/StableCoordinate/Principal.lean) assembles these statements.
+
+Accordingly, this card must no longer be presented as filling a current absence of Lean coverage for that October 5 result. It remains an independent HOL check of the displayed polynomial identities on ℝ⁵. This update records source and scope inspection; it is not a fresh Lean build, comparator run, or equivalence proof between the HOL maps and every part of the new Lean formalization. The HOL statement, sources and retained evidence are unchanged.
+
+## Historical relation to the release's Lean coverage at adc7f124
+
+The discussion below records the original release comparison. Its “beyond the release's Lean” wording is historical and does not describe the later `fd4aeeb2` coverage.
 
 "Lean" below means the release's selected statement, as described in its `lean/docs/NNN.md`; this repository does not rebuild or re-run that Lean.
 

@@ -8,12 +8,14 @@ The collection combines independent checks of selected steps with illustrative c
 
 The proof leaves and profile recipes are plain HOL Light source. The original Hearth orchestration is private. The public convenience runner and manual loading instructions are below; neither should be confused with a statement-and-axiom checker.
 
+**Coverage update, 2026-10-08:** the original release comparisons are pinned to `adc7f124`. Upstream [`fd4aeeb2`](https://github.com/openai/math/tree/fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb) now includes the October 5 stable-coordinate result in Lean. The 049 row and [card update](cards/049/CARD.md#coverage-update--2026-10-08) reflect that source change. This is a coverage update, not a new proof replay.
+
 ## Cards
 
-| Card | Family | What HOL certifies | Beyond the release's Lean | Profile | Warm | Cold |
+| Card | Family | What HOL certifies | Relation to the release's Lean | Profile | Warm | Cold |
 |---|---|---|---|---|---|---|
 | [158](cards/158/CARD.md) | 158 · The Euclidean plane cannot be colored with five colors | The seven placed Moser vertices lie in the three-label region, the 11 edges have length exactly 1, and no proper 3-labelling exists; exact arithmetic in ℚ(√3,√11) | Independent method for a Lean-covered step | `light` | PASS (26/26) | PASS |
-| [049](cards/049/CARD.md) | 049 · A stable-coordinate counterexample in four variables | Two explicit polynomial maps on ℝ⁵ are mutually inverse and send the paper's f to the first coordinate | Checks the October 5 stable-coordinate construction; family 049 has selected Lean coverage for its September 24 companion. This HOL card does not prove the October 5 polynomial’s noncoordinate obstruction | `light` | PASS (8/8; 30/30) | PASS |
+| [049](cards/049/CARD.md) | 049 · A stable-coordinate counterexample in four variables | Two explicit polynomial maps on ℝ⁵ are mutually inverse and send the paper's f to the first coordinate | Independent polynomial-identity check; upstream fd4aeeb2 now also covers the October 5 stable-coordinate result. This HOL card does not prove its noncoordinate obstruction | `light` | PASS (8/8; 30/30) | PASS |
 | [353](cards/353/CARD.md) | 353 · Affine Bernstein rigidity through dimension nine and a smooth dimension-ten counterexample | The algebra of the invariant box: stationary corner (9/2, 7/2, 33/7), face signs, the D-equation from the C-equation | Checks algebra inside a result that is paper-only in the release (Lean covers dimensions 3–9 only); the ODE and PDE reduction are not covered | `light` | PASS (4/4) | PASS |
 | [354-light](cards/354/CARD.md) | 354 · The isoperimetric profile of the cubic three-torus | Switch volumes 4·PI/81 and 1/PI and the radii there, for any positive constant PI | Cross-check of a Lean-covered result; on-screen value | `light` | PASS (4/4) | PASS |
 | [354-pi](cards/354/CARD.md) | 354 · The isoperimetric profile of the cubic three-torus | The same with HOL's real π: ties at 4π/81 (radii 1/3, 2/9) and at 1/π (area 2); the ball loses at 1/π | Cross-check; minimality is Lean's | `heavy` | PASS (10/10) | PASS |
@@ -37,7 +39,7 @@ Cards 196, 028, 325 and 354-light originated as one batch file and were split in
 1. A HOL certificate establishes its actual formal statement under its definitions and imported library. Its connection to the paper is a separate, visible interpretation in the card.
 2. Refer to the release's `lean/docs/NNN.md` for its selected Lean statements. A paper title does not describe the full scope of a formalization.
 3. For unformalized paper conclusions, use “the paper claims.” Do not describe this collection as establishing the papers' main theorems or as the first proof of any result.
-4. The example for family 049 checks the October 5 paper’s explicit polynomial inverse maps on ℝ⁵; it does not establish the non-coordinate claim for that paper’s particular polynomial. The family’s September 24 companion has selected Lean coverage, as explained in the card. Family 353 checks dimension-10 invariant-box algebra, not the full counterexample or its ODE/PDE argument.
+4. The example for family 049 checks the October 5 paper’s explicit polynomial inverse maps on ℝ⁵; it does not establish the non-coordinate claim for that paper’s particular polynomial. Both the September 24 companion and, as of upstream `fd4aeeb2`, the October 5 stable-coordinate result have selected Lean coverage, as explained in the card. Family 353 checks dimension-10 invariant-box algebra, not the full counterexample or its ODE/PDE argument.
 5. A deliberately failing control is evidence about the tested check, not proof that a verifier rejects every invalid input.
 6. HOL replay and the separate Lean re-check are distinct activities. The updated Lean results and their exact limits are in [Comparator re-check](docs/comparator-recheck.md).
 7. This work used AI assistance. The archived scout notes are [historical context](docs/history/scout-rules-20261008-0103Z.md), not current status.
