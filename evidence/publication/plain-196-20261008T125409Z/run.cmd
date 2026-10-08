@@ -1,0 +1,1 @@
+HOLDIR=/home/bluestar/hearth/data/hol-light /home/bluestar/scratch/cards-publish-20261008-1255/repo/bin/replay-plain /home/bluestar/scratch/cards-publish-20261008-1255/smoke-196-20261008T125409Z/plain-196 196

@@ -1,0 +1,8 @@
+print_endline "\nPLAIN_12352dcb8fd0431690d3432ac50e903f:profile_start";;
+loadt "/home/bluestar/scratch/cards-publish-20261008-1255/repo/replay/light.ml";;
+print_endline "\nPLAIN_12352dcb8fd0431690d3432ac50e903f:profile_end";;
+print_endline "\nPLAIN_12352dcb8fd0431690d3432ac50e903f:source_start";;
+loadt "/home/bluestar/scratch/cards-publish-20261008-1255/repo/cards/196/kaplansky196_bounds.ml";;
+print_endline "\nPLAIN_12352dcb8fd0431690d3432ac50e903f:source_end";;
+let () = ignore (K196_RATIONAL_BOUNDS : thm); print_endline "\nPLAIN_12352dcb8fd0431690d3432ac50e903f:binding:K196_RATIONAL_BOUNDS";;
+print_endline "\nPLAIN_12352dcb8fd0431690d3432ac50e903f:done";;

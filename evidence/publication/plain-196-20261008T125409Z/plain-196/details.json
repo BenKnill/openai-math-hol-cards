@@ -1,0 +1,26 @@
+[
+  {
+    "card": "196",
+    "kind": "leaf",
+    "file": "kaplansky196_bounds.ml",
+    "profile": "light",
+    "got": "clean",
+    "ok": "ok",
+    "reason": "source loaded and theorem types checked",
+    "exit": 0,
+    "bindings": [
+      "K196_RATIONAL_BOUNDS"
+    ]
+  },
+  {
+    "card": "196",
+    "kind": "control",
+    "file": "negctl_kaplansky196_below_99_100.ml",
+    "profile": "light",
+    "got": "raised",
+    "ok": "ok",
+    "reason": "control raised Failure during source load",
+    "exit": 0,
+    "bindings": []
+  }
+]

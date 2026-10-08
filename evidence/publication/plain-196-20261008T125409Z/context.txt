@@ -1,0 +1,4 @@
+repo HEAD fc38bb4fb502299e792aa2d8bcbfded9da82ab52
+hol-light HEAD 2a1cea8f1cb7f3885a60d947ba06eabac6ec1d32 dirty=0
+ocaml The OCaml toplevel, version 5.4.0
+host Linux 6.6.87.2-microsoft-standard-WSL2 x86_64
